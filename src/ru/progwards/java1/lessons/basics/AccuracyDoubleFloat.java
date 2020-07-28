@@ -2,14 +2,14 @@ package ru.progwards.java1.lessons.basics;
 
 public class AccuracyDoubleFloat {
     static final double PI = 3.14;
-    static final double R = 6371.2; // радиус Земли в км
+    static final double R = 6_371.2; // радиус Земли в км
 
     public static double volumeBallDouble(double radius) {
-        return 4/3 * PI * radius*radius*radius; // V = 4\3 * pi * R^3
+        return (4 * PI * Math.pow(radius, 3))/3; //radius*radius*radius; // V = 4\3 * pi * R^3
     }
 
     public static float volumeBallFloat(float radius) {
-        return  4/3 * (float)PI * radius*radius*radius;
+        return  (4 * (float)PI * radius*radius*radius)/3;
     }
 
     public static double calculateAccuracy(double radius) {
