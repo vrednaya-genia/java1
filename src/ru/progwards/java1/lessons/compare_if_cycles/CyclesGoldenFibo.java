@@ -3,6 +3,8 @@ package ru.progwards.java1.lessons.compare_if_cycles;
 public class CyclesGoldenFibo {
 
     public static boolean containsDigit(int number, int digit) {
+        if (number == 0 && digit == 0) return true;
+
         while (number != 0) {
             if (number%10 == digit) return true;
             number = number/10;
