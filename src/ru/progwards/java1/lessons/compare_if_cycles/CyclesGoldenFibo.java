@@ -38,7 +38,7 @@ public class CyclesGoldenFibo {
     }
 
     public static void main(String[] args) {
-        int i, j, k;
+        int i, j;
 
         for (i=1; i<=15; i++) {
             System.out.println(fiboNumber(i));
@@ -46,9 +46,7 @@ public class CyclesGoldenFibo {
 
         for (i=1; i<=100; i++) {
             for (j=1; j<=100; j++) {
-                for (k=1; k<=100; k++) {
-                    if (isGoldenTriangle(i, j, k)) System.out.println(i + " " + j + " " + k);
-                }
+                    if (isGoldenTriangle(i, j, j)) System.out.println(i + " " + j + " " + j);
             }
         }
     }
