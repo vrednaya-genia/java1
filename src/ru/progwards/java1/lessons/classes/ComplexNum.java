@@ -12,8 +12,8 @@ public class ComplexNum {
     @Override
     public String toString() {
         //if (this.b==0) return Integer.toString(this.a);
-        if (this.b<0) return this.a + "-" + Math.abs(this.b) + "i";
-        else return this.a + "+" + this.b + "i";
+        //else if (this.b<0) return this.a + "-" + Math.abs(this.b) + "i";
+        return this.a + "+" + this.b + "i";
     }
 
     public ComplexNum add(ComplexNum num) { // (a + bi) + (c + di) = (a + c) + (b + d)i
