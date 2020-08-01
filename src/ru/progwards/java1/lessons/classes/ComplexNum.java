@@ -11,8 +11,8 @@ public class ComplexNum {
 
     @Override
     public String toString() {
-        if (this.b==0) return Integer.toString(this.a);
-        else if (this.b<0) return this.a + "-" + Math.abs(this.b) + "i";
+        //if (this.b==0) return Integer.toString(this.a);
+        if (this.b<0) return this.a + "-" + Math.abs(this.b) + "i";
         else return this.a + "+" + this.b + "i";
     }
 
@@ -29,23 +29,28 @@ public class ComplexNum {
     }
 
     public ComplexNum mul(ComplexNum num) { //(a + bi) * (c + di) = (a*c - b*d) + (b*c + a*d)i
-        this.a = this.a*num.a - this.b*num.b;
-        this.b = this.b*num.a + this.a*num.b;
+        int a = this.a;
+        int b = this.b;
+
+        this.a = a*num.a - b*num.b;
+        this.b = b*num.a + a*num.b;
+
         return this;
     }
 
     public ComplexNum div(ComplexNum num) { //(a + bi) / (c + di) = (a*c + b*d)/(c*c+d*d) + ((b*c - a*d)/(c*c+d*d))i
-        this.a = (this.a*num.a + this.b*num.b)/(num.a*num.a + num.b*num.b);
-        this.b = (this.b*num.a - this.a*num.b)/(num.a*num.a + num.b*num.b);
+        int a = this.a;
+        int b = this.b;
+
+        this.a = (a*num.a + b*num.b)/(num.a*num.a + num.b*num.b);
+        this.b = (b*num.a - a*num.b)/(num.a*num.a + num.b*num.b);
+
         return this;
     }
 
     public static void main(String[] args) {
-        ComplexNum cn = new ComplexNum(1,2);
-        System.out.println(cn.toString());
-        System.out.println(cn.add(cn));
-        System.out.println(cn.mul(cn));
-        System.out.println(cn.div(cn));
-        System.out.println(cn.sub(cn));
+        System.out.println(new ComplexNum(99, 50).sub(new ComplexNum(1, 50)).toString());
+        System.out.println(new ComplexNum(1, 1).mul(new ComplexNum(99, 99)).toString());
+        System.out.println(new ComplexNum(1000, 1000).div(new ComplexNum(100, 100)).toString());
     }
 }
