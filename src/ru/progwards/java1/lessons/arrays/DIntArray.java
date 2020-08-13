@@ -6,11 +6,7 @@ public class DIntArray {
     private int[] intArray;
 
     public DIntArray() {
-        int N=6;
-        intArray = new int[N];
-        for (int i=0; i<N; i++) {
-            intArray[i]=i;
-        }
+        intArray = new int[0];
     }
 
     public void add(int num) {
@@ -18,7 +14,8 @@ public class DIntArray {
         System.arraycopy(intArray, 0, newIntArray, 0, intArray.length);
         newIntArray[newIntArray.length-1] = num;
 
-        System.out.println(Arrays.toString(newIntArray));
+        intArray = new int[newIntArray.length];
+        System.arraycopy(newIntArray, 0, intArray, 0, newIntArray.length);
     }
 
     public void atInsert(int pos, int num) {
@@ -27,7 +24,8 @@ public class DIntArray {
         newIntArray[pos] = num;
         System.arraycopy(intArray, pos, newIntArray, pos+1, intArray.length-pos);
 
-        System.out.println(Arrays.toString(newIntArray));
+        intArray = new int[newIntArray.length];
+        System.arraycopy(newIntArray, 0, intArray, 0, newIntArray.length);
     }
 
     public void atDelete(int pos) {
@@ -35,7 +33,8 @@ public class DIntArray {
         System.arraycopy(intArray, 0, newIntArray, 0, pos);
         System.arraycopy(intArray, pos+1, newIntArray, pos, intArray.length-pos-1);
 
-        System.out.println(Arrays.toString(newIntArray));
+        intArray = new int[newIntArray.length];
+        System.arraycopy(newIntArray, 0, intArray, 0, newIntArray.length);
     }
 
     public int at(int pos) {
@@ -45,9 +44,12 @@ public class DIntArray {
     public static void main(String[] args) {
         DIntArray a = new DIntArray();
 
-        a.add(57);
-        a.atInsert(4,51);
+        a.add(46);
+        a.add(40);
+        a.add(15);
+        a.add(82);
+        a.atInsert(3,40);
         a.atDelete(2);
-        System.out.println(a.at(1));
+        System.out.println(a.at(0));
     }
 }
