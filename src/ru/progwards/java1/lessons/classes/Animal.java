@@ -41,14 +41,14 @@ public class Animal {
 
     public static void main(String[] args) {
         Cow cow1 = new Cow(90.0);
-        Hamster humster1 = new Hamster(20.0);
+        Hamster hamster1 = new Hamster(20.0);
         Duck duck1 = new Duck(10.0);
 
         System.out.println(cow1.toString());
         System.out.println(cow1.toStringFull());
 
-        System.out.println(humster1.toString());
-        System.out.println(humster1.toStringFull());
+        System.out.println(hamster1.toString());
+        System.out.println(hamster1.toStringFull());
 
         System.out.println(duck1.toString());
         System.out.println(duck1.toStringFull());
