@@ -58,7 +58,7 @@ public class ArrayInteger {
                 this.digits[i] = (byte)(this.digits[i]+num.digits[i]+addition);
                 addition = 0;
             } else {
-                this.digits[i] = 0;
+                this.digits[i] = (byte)(this.digits[i]+num.digits[i]+addition-10);
                 addition = 1;
             }
         }
@@ -73,14 +73,14 @@ public class ArrayInteger {
     }
 
     public static void main(String[] args) {
-        ArrayInteger a = new ArrayInteger(4);
-        a.fromInt(new BigInteger("1234"));
-        BigInteger b = a.toInt();
-        System.out.println(b);
+        ArrayInteger a1 = new ArrayInteger(8);
+        a1.fromInt(new BigInteger("15696733"));
 
-        ArrayInteger a1 = new ArrayInteger(6);
-        a1.fromInt(new BigInteger("222222"));
-        System.out.println(a1.add(a));
+        ArrayInteger a2 = new ArrayInteger(6);
+        a2.fromInt(new BigInteger("199794"));
+
+        System.out.println(a1.add(a2));
+
         BigInteger b1 = a1.toInt();
         System.out.println(b1);
     }
