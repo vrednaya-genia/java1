@@ -9,7 +9,7 @@ public class IntNumber extends Number {
 
     @Override
     public Number mul(Number num) {
-        if (getClass() != num.getClass()) {
+        if (num == null || getClass() != num.getClass()) {
             return null;
         }
         int num1 = ((IntNumber)num).number;
@@ -18,7 +18,7 @@ public class IntNumber extends Number {
 
     @Override
     public Number div(Number num) {
-        if (getClass() != num.getClass()) {
+        if (num == null || getClass() != num.getClass()) {
             return null;
         }
         int num1 = ((IntNumber)num).number;
@@ -27,12 +27,18 @@ public class IntNumber extends Number {
 
     @Override
     public Number newNumber(String strNum) {
-        return new IntNumber(Integer.valueOf(strNum));
+        if (strNum==null) {
+            return null;
+        }
+        if (strNum.indexOf('.')!=-1) {
+            String[] parts = strNum.split("\\.");
+            return new IntNumber(Integer.parseInt(parts[0]));
+        }
+        return new IntNumber(Integer.parseInt(strNum));
     }
 
     @Override
     public String toString() {
         return String.valueOf(number);
-        //return Integer.toString(number);
     }
 }
