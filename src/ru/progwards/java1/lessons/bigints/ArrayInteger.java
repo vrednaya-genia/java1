@@ -54,7 +54,7 @@ public class ArrayInteger {
 
         byte addition = 0;
         for (int i=0; i<digits.length; i++) {
-            if (this.digits[i]+num.digits[i]<9) {
+            if (this.digits[i]+num.digits[i]+addition<=9) {
                 this.digits[i] = (byte)(this.digits[i]+num.digits[i]+addition);
                 addition = 0;
             } else {
@@ -74,12 +74,12 @@ public class ArrayInteger {
 
     public static void main(String[] args) {
         ArrayInteger a1 = new ArrayInteger(8);
-        a1.fromInt(new BigInteger("15696733"));
+        a1.fromInt(new BigInteger("15696999"));
 
         ArrayInteger a2 = new ArrayInteger(6);
-        a2.fromInt(new BigInteger("199794"));
+        a2.fromInt(new BigInteger("199999"));
 
-        System.out.println(a1.add(a2));
+        //System.out.println(a1.add(a2));
 
         BigInteger b1 = a1.toInt();
         System.out.println(b1);
