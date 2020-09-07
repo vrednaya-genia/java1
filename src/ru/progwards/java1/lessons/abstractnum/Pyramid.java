@@ -7,10 +7,14 @@ public class Pyramid extends Figure3D {
 
     @Override
     public Number volume() {
-        IntNumber i3 = new IntNumber(3);
+        /*IntNumber i3 = new IntNumber(3);
         if (segment.getClass() == i3.getClass()) {
             return segment.mul(segment.mul(segment.div(i3)));
         }
         return segment.mul(segment.mul(segment.div(new DoubleNumber(3.0))));
+        */
+
+        Number a3 = segment.mul(segment.mul(segment));
+        return a3.div(a3.newNumber("3"));
     }
 }
