@@ -2,7 +2,6 @@ package ru.progwards.java1.lessons.io1;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.charset.Charset;
 import java.util.Scanner;
 
 public class Coder {
@@ -21,6 +20,8 @@ public class Coder {
                         char symbol = strIn.charAt(i);
                         strOut = strOut + code[(int)symbol];
                     }
+                    char s = '\n';
+                    strOut = strOut + code[(int)s];
                     writer.write(strOut);
                 }
             } finally {
@@ -43,11 +44,20 @@ public class Coder {
     }
 
     public static void main(String[] args) {
-        char[] a = new char[128];
-        for (int i=0; i<128; i++) {
-            a[i] = (char)i;
+        char[] a = new char[2000];
+        for (int i=0; i<2000; i++) {
+            a[i] = (char)(2000-i);
         }
 
-        codeFile("D:\\123.txt", "D:\\1243.txt", a, "D:\\123log.txt");
+        try {
+            FileWriter writer = new FileWriter("D:\\123.txt");
+            writer.write("Java - язык программирования, " +
+                    "разработанный компанией Sun Microsystems.");
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        codeFile("D:\\123.txt", "D:\\1234.txt", a, "D:\\123log.txt");
     }
 }
