@@ -1,32 +1,24 @@
 package ru.progwards.java1.lessons.io1;
 
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.util.Scanner;
 
 public class Coder {
     public static void codeFile(String inFileName, String outFileName, char[] code, String logName) {
         try {
-            FileReader reader = new FileReader(inFileName);
-            Scanner scanner = new Scanner(reader);
+            FileInputStream reader = new FileInputStream(inFileName);
             FileWriter writer = new FileWriter(outFileName);
-            String strIn;
             String strOut = "";
             try {
-                while (scanner.hasNextLine()) {
-                    strIn = scanner.nextLine();
-                    // посимвольное кодирование
-                    for (int i=0; i<strIn.length(); i++) {
-                        char symbol = strIn.charAt(i);
-                        strOut = strOut + code[(int)symbol];
-                    }
-                    char s = '\n';
-                    strOut = strOut + code[(int)s];
-                    writer.write(strOut);
+                byte[] inPut = reader.readAllBytes();
+                // посимвольное кодирование
+                for (int i=0; i<inPut.length; i++) {
+                    char symbol = (char)inPut[i];
+                    strOut = strOut + code[(int)symbol];
                 }
+                writer.write(strOut);
             } finally {
                 reader.close();
-                scanner.close();
                 writer.close();
             }
         } catch (Exception e) {
@@ -44,15 +36,16 @@ public class Coder {
     }
 
     public static void main(String[] args) {
-        char[] a = new char[2000];
-        for (int i=0; i<2000; i++) {
-            a[i] = (char)(2000-i);
+        char[] a = new char[66000];
+        for (int i=0; i<66000; i++) {
+            a[i] = (char)(66000-i);
         }
 
         try {
             FileWriter writer = new FileWriter("D:\\123.txt");
-            writer.write("Java - язык программирования, " +
-                    "разработанный компанией Sun Microsystems.");
+            writer.write("Java - язык программирования, \n" +
+                    "разработанный компанией Sun Microsystems. \n" +
+                    "1234 \n");
             writer.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
