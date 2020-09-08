@@ -1,5 +1,9 @@
 package ru.progwards.java1.lessons.test;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class Test1 {
 
     class Person {
@@ -23,8 +27,27 @@ public class Test1 {
         } ;    
     }
 
-    public static void main(String[] args){
+    private int lineCount(String filename) throws IOException {
+        int res = 0;
+        try {
+            FileReader reader = new FileReader(filename);
+            Scanner scanner = new Scanner(reader);
+            try {
+                while (scanner.hasNextLine()) {
+                    String temp = scanner.nextLine();
+                    res++;
+                }
+            } finally {
+                reader.close();
+            }
+        } catch (IOException e) {
+            System.out.println("файл не найден");
+        }
+        return res;
+    }
 
+    public static void main(String[] args) throws IOException {
+        Test1 t1 = new Test1();
         /*
         System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
 
@@ -40,5 +63,6 @@ public class Test1 {
         }
         System.out.println(prec); //4.9E-324
         */
+        System.out.println(t1.lineCount("D:\\123.txt"));
     }
 }
