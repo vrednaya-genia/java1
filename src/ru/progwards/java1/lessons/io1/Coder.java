@@ -1,23 +1,15 @@
 package ru.progwards.java1.lessons.io1;
 
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 
 public class Coder {
     public static void codeFile(String inFileName, String outFileName, char[] code, String logName) {
         try {
-            //FileInputStream reader = new FileInputStream(inFileName);
             FileReader reader = new FileReader(inFileName);
             FileWriter writer = new FileWriter(outFileName);
             String strOut = "";
             try {
-                // посимвольное кодирование
-                //byte[] inPut = reader.readAllBytes();
-                //for (int i=0; i<inPut.length; i++) {
-                //    char symbol = (char)inPut[i];
-                //    strOut = strOut + code[(int)symbol];
-                //}
                 int i;
                 while ((i=reader.read()) != -1){
                     char symbol = (char) i;
