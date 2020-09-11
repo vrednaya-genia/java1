@@ -58,6 +58,6 @@ public class Coder {
             System.out.println(e.getMessage());
         }
 
-        codeFile("D:\\123.txt", "D:\\1235.txt", a, "D:\\123log.txt");
+        codeFile("D:\\123.txt", "D:\\12345.txt", a, "D:\\123log.txt");
     }
 }
