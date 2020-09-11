@@ -1,9 +1,41 @@
 package ru.progwards.java1.lessons.io1;
 
+//import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 
 public class Coder {
+    /*
+    public static void codeFile(String inFileName, String outFileName, char[] code, String logName) {
+        try {
+            FileInputStream reader = new FileInputStream(inFileName);
+            FileWriter writer = new FileWriter(outFileName);
+            String strOut = "";
+            try {
+                byte[] inPut = reader.readAllBytes();
+                // посимвольное кодирование
+                for (int i=0; i<inPut.length; i++) {
+                    char symbol = (char)inPut[i];
+                    strOut = strOut + code[(int)symbol];
+                }
+                writer.write(strOut);
+            } finally {
+                reader.close();
+                writer.close();
+            }
+        } catch (Exception e) {
+            try {
+                FileWriter logFile = new FileWriter(logName);
+                try {
+                    logFile.write(e.getMessage());
+                } finally {
+                    logFile.close();
+                }
+            } catch (Exception e1) {
+                System.out.println("не судьба..");
+            }
+        }
+    }*/
     public static void codeFile(String inFileName, String outFileName, char[] code, String logName) {
         try {
             FileReader reader = new FileReader(inFileName);
@@ -50,6 +82,6 @@ public class Coder {
             System.out.println(e.getMessage());
         }
 
-        codeFile("D:\\123.txt", "D:\\12345.txt", a, "D:\\123log.txt");
+        codeFile("D:\\123.txt", "D:\\1234.txt", a, "D:\\123log.txt");
     }
 }
