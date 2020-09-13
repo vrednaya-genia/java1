@@ -28,15 +28,19 @@ public class Translator {
                     postw = postw + c;
                 } // слова с дефизом %)
 
-            for (int j=0; j<inLang.length; j++) {
-                if (word2.equals(inLang[j])) {
-                    if (isUp) {
-                        word2 = outLang[j].substring(0,1).toUpperCase()+outLang[j].substring(1);
-                    } else {
-                        word2 = outLang[j];
+            if ("".equals(word2)) {
+                res = res + prew + postw + " ";
+            } else {
+                for (int j = 0; j < inLang.length; j++) {
+                    if (word2.equals(inLang[j])) {
+                        if (isUp) {
+                            word2 = outLang[j].substring(0, 1).toUpperCase() + outLang[j].substring(1);
+                        } else {
+                            word2 = outLang[j];
+                        }
+                        res = res + prew + word2 + postw + " ";
+                        break;
                     }
-                    res = res + prew + word2 + postw + " ";
-                    break;
                 }
             }
         }
@@ -54,6 +58,6 @@ public class Translator {
         String[] ain1 = {"make", "love", "not", "war"};
         String[] aout1 = {"твори", "любовь", "не", "войну"};
         Translator aa1 = new Translator(ain1, aout1);
-        System.out.println(aa1.translate("make love not war"));
+        System.out.println(aa1.translate("Not war - love make!"));
     }
 }
