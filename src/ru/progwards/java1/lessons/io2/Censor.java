@@ -74,10 +74,11 @@ public class Censor {
             System.out.println(e.getMessage());
         }
         String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
+
         try {
-            censorFile("D:\\123.txt", obscene);
+            censorFile("D:\\1234.txt", obscene);
         } catch (CensorException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
         }
     }
 }
