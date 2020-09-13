@@ -32,6 +32,8 @@ public class Translator {
                 if (word2.equals(inLang[j])) {
                     if (isUp) {
                         word2 = outLang[j].substring(0,1).toUpperCase()+outLang[j].substring(1);
+                    } else {
+                        word2 = outLang[j];
                     }
                     res = res + prew + word2 + postw + " ";
                     break;
@@ -48,5 +50,10 @@ public class Translator {
         String[] aout = {"привет", "мир"};
         Translator aa = new Translator(ain, aout);
         System.out.println(aa.translate("Hello World!"));
+
+        String[] ain1 = {"make", "love", "not", "war"};
+        String[] aout1 = {"твори", "любовь", "не", "войну"};
+        Translator aa1 = new Translator(ain1, aout1);
+        System.out.println(aa1.translate("make love not war"));
     }
 }

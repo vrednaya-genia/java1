@@ -6,6 +6,26 @@ import java.io.RandomAccessFile;
 import java.util.Scanner;
 
 public class Censor {
+    static class CensorException extends Throwable implements AutoCloseable {
+        String mExc;
+        String fName;
+
+        CensorException(String mExc, String fName) throws Exception {
+            this.mExc = mExc;
+            this.fName = fName;
+        }
+
+        @Override
+        public void close() throws Exception {
+            throw new Exception();
+        }
+
+        @Override
+        public String toString() {
+            return "<"+fName+">:<"+mExc+">";
+        }
+    }
+
     public static void censorFile(String inoutFileName, String[] obscene) throws CensorException, Exception {
         File fn = new File(inoutFileName);
         try (Scanner scanner = new Scanner(fn)) {
@@ -45,26 +65,6 @@ public class Censor {
             }
         } catch (Exception e) {
             throw new CensorException(e.getMessage(), inoutFileName);
-        }
-    }
-
-    static class CensorException extends Throwable implements AutoCloseable {
-        String mExc;
-        String fName;
-
-        CensorException(String mExc, String fName) throws Exception {
-            this.mExc = mExc;
-            this.fName = fName;
-        }
-
-        @Override
-        public void close() throws Exception {
-            throw new Exception();
-        }
-
-        @Override
-        public String toString() {
-            return "<"+fName+">:<"+mExc+">";
         }
     }
 
