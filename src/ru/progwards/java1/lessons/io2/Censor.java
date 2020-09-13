@@ -1,5 +1,6 @@
 package ru.progwards.java1.lessons.io2;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
@@ -21,10 +22,11 @@ public class Censor {
     }
 
     public static void censorFile(String inoutFileName, String[] obscene) throws CensorException {
-        try (Scanner scanner = new Scanner(inoutFileName)) {
-            RandomAccessFile raf = new RandomAccessFile(inoutFileName, "rw");
-            while (scanner.hasNext()) {
-                String word = scanner.next();
+        File fn = new File(inoutFileName);
+        try (Scanner scan = new Scanner(fn)) { // воспринимал строку пути как просто строку %)
+            RandomAccessFile raf = new RandomAccessFile(fn, "rw");
+            while (scan.hasNext()) {
+                String word = scan.next();
                 String repl = "";
                 boolean wr = true;
                 // для сравнения выделяем слово без знаков препинания
@@ -38,7 +40,7 @@ public class Censor {
                         prew = prew + c;
                     } else {
                         postw = postw + c;
-                    }
+                    } // слова через дефиз?
 
                 for (int i = 0; i < obscene.length; i++) {
                     if (word2.equals(obscene[i])) {
@@ -56,27 +58,27 @@ public class Censor {
                     raf.write(word.getBytes());
                 }
             }
-        } catch (Throwable e) {
-            throw new CensorException(e.getMessage(), inoutFileName);
+            raf.close();
+        } catch (Throwable t) {
+            throw new CensorException(t.getMessage(), inoutFileName);
         }
     }
 
     public static void main(String[] args) {
-        try {
-            FileWriter writer = new FileWriter("D:\\123.txt");
+        try (FileWriter writer = new FileWriter("D:\\123.txt")) {
             writer.write("Java — язык программирования, " +
                     "разработанный Sun Microsystems " +
                     "(в последующем приобретённой Oracle). ");
-            writer.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
         String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
 
         try {
-            censorFile("D:\\1234.txt", obscene);
-        } catch (CensorException e) {
-            System.out.println(e.toString());
+            censorFile("D:\\123.txt", obscene);
+        } catch (CensorException ce) {
+            System.out.println(ce.toString());
         }
     }
 }
