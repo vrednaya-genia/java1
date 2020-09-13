@@ -6,11 +6,12 @@ import java.io.RandomAccessFile;
 import java.util.Scanner;
 
 public class Censor {
-    static class CensorException extends Throwable {
+    static class CensorException extends Exception {
         String mExc;
         String fName;
 
         CensorException(String mExc, String fName) {
+            super("<"+fName+">:<"+mExc+">");
             this.mExc = mExc;
             this.fName = fName;
         }
@@ -59,8 +60,8 @@ public class Censor {
                 }
             }
             raf.close();
-        } catch (Throwable t) {
-            throw new CensorException(t.getMessage(), inoutFileName);
+        } catch (Exception e) {
+            throw new CensorException(e.getMessage(), inoutFileName);
         }
     }
 
@@ -76,9 +77,9 @@ public class Censor {
         String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
 
         try {
-            censorFile("D:\\123.txt", obscene);
-        } catch (CensorException ce) {
-            System.out.println(ce.toString());
+            censorFile("D:\\1234.txt", obscene);
+        } catch (CensorException e) {
+            System.out.println(e.toString());
         }
     }
 }
