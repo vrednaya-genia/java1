@@ -1,7 +1,6 @@
 package ru.progwards.java1.lessons.io2;
 
 import java.io.FileWriter;
-import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
 
@@ -22,9 +21,8 @@ public class Censor {
     }
 
     public static void censorFile(String inoutFileName, String[] obscene) throws CensorException {
-        File fn = new File(inoutFileName);
-        try (Scanner scanner = new Scanner(fn)) {
-            RandomAccessFile raf = new RandomAccessFile(fn, "rw");
+        try (Scanner scanner = new Scanner(inoutFileName)) {
+            RandomAccessFile raf = new RandomAccessFile(inoutFileName, "rw");
             while (scanner.hasNext()) {
                 String word = scanner.next();
                 String repl = "";
