@@ -58,7 +58,7 @@ public class Censor {
                     raf.write(word.getBytes());
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new CensorException(e.getMessage(), inoutFileName);
         }
     }
