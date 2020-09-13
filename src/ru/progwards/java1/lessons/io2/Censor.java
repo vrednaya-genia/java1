@@ -48,14 +48,18 @@ public class Censor {
                         for (int j = 0; j < obscene[i].length(); j++) {
                             repl = repl + "*";
                         }
-                        repl = prew + repl + postw + " ";
+                        if (scan.hasNext()) {
+                            repl = prew + repl + postw + " ";
+                        }
                         raf.write(repl.getBytes());
                         wr = false;
                         break;
                     }
                 }
                 if (wr) {
-                    word = word + " "; // записываем со знаками препинания
+                    if (scan.hasNext()) {
+                        word = word + " ";
+                    }
                     raf.write(word.getBytes());
                 }
             }
@@ -69,7 +73,7 @@ public class Censor {
         try (FileWriter writer = new FileWriter("D:\\123.txt")) {
             writer.write("Java — язык программирования, " +
                     "разработанный Sun Microsystems " +
-                    "(в последующем приобретённой Oracle). ");
+                    "(в последующем приобретённой Oracle).");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -77,7 +81,7 @@ public class Censor {
         String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
 
         try {
-            censorFile("D:\\1234.txt", obscene);
+            censorFile("D:\\123.txt", obscene);
         } catch (CensorException e) {
             System.out.println(e.toString());
         }
