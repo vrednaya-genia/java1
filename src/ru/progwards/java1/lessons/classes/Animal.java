@@ -32,11 +32,11 @@ public class Animal {
     }
 
     public double calculateFoodWeight() {
-        return this.weight*this.getFoodCoeff();
+        return getWeight()*getFoodCoeff();
     }
 
     public String toStringFull() {
-        return "I am " + this.getKind() + ", eat " + this.getFoodKind() + " " + this.calculateFoodWeight();
+        return "I am " + getKind() + ", eat " + getFoodKind() + " " + calculateFoodWeight();
     }
 
     public static void main(String[] args) {

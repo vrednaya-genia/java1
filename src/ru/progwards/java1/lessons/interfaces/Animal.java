@@ -83,9 +83,10 @@ public class Animal implements FoodCompare, CompareWeight {
     }
 
     public static void main(String[] args) {
+        Animal animal1 = new Animal(20.0);
         Cow cow1 = new Cow(90.0);
         Hamster hamster1 = new Hamster(20.0);
-        Duck duck1 = new Duck(10.0);
+        Duck duck1 = new Duck(20.0);
 
         System.out.println(cow1.toStringFull());
 
@@ -93,5 +94,9 @@ public class Animal implements FoodCompare, CompareWeight {
         System.out.println(duck1.compareFoodPrice(cow1));
 
         System.out.println(cow1.compareWeight(duck1));
+        System.out.println(duck1.compareWeight(hamster1));
+
+        System.out.println(duck1.equals(hamster1));
+        System.out.println(duck1.equals(animal1));
     }
 }

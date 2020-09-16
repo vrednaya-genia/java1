@@ -11,14 +11,14 @@ public class Censor {
         String fName;
 
         CensorException(String mExc, String fName) {
-            super("<"+fName+">:<"+mExc+">");
+            super(fName+":"+mExc);
             this.mExc = mExc;
             this.fName = fName;
         }
 
         @Override
         public String toString() {
-            return "<"+fName+">:<"+mExc+">";
+            return fName+":"+mExc;
         }
     }
 

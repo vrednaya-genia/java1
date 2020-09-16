@@ -1,7 +1,11 @@
 package ru.progwards.java1.lessons.test;
 
+
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class Test1 {
@@ -44,6 +48,13 @@ public class Test1 {
             System.out.println("файл не найден");
         }
         return res;
+    }
+
+    public List<Integer> listAction(List<Integer> list) {
+        list.remove(Collections.min(list));
+        list.add(0, list.size());
+        list.add(2, Collections.max(list));
+        return list;
     }
 
     public static void main(String[] args) throws IOException {
