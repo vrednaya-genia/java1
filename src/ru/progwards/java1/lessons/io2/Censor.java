@@ -63,8 +63,14 @@ public class Censor {
                         word2[0] = word.substring(0, ind);
                         word2[1] = word.substring(ind+1);
                         res = censor(word2[0], obscene) + "-" + censor(word2[1], obscene);
+                    } else if (word.contains("'")) {
+                        String[] word2 = new String[2];
+                        int ind = word.indexOf("'");
+                        word2[0] = word.substring(0, ind);
+                        word2[1] = word.substring(ind+1);
+                        res = censor(word2[0], obscene) + "'" + censor(word2[1], obscene);
                     } else {
-                        res = censor(word, obscene);
+                            res = censor(word, obscene);
                     }
 
                     if (scan.hasNext()) {
@@ -83,12 +89,12 @@ public class Censor {
 
     public static void main(String[] args) {
         try (FileWriter writer = new FileWriter("D:\\123.txt")) {
-            writer.write("I collect two-sided cards. Java супер)");
+            writer.write("It's a nice day, isn't it? Java супер)");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-        String[] obscene = {"Java", "Oracle", "two", "Microsystems"};
+        String[] obscene = {"Java", "Oracle", "two", "day"};
 
         try {
             censorFile("D:\\123.txt", obscene);
