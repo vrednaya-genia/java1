@@ -57,30 +57,30 @@ public class Finder {
         for (int i=counts.length-2; i>=0; i--) {
             if (counts[i]>=max) {
                 max = counts[i];
-                res = strs[i] + ":" + counts[i];
+                //res = strs[i] + ":" + counts[i];
+                res = strs[i] + ":" + (i+1);
             }
         }
         return res;
     }
 
     public static void main(String[] args) {
-        Collection<Integer> numbers = new ArrayList();
-        numbers.add(3);
-        numbers.add(8);
-        numbers.add(1);
-        numbers.add(5);
-        numbers.add(4);
-        Collection<Integer> res = findLocalMax(numbers);
-        for (Integer i : res) {
-            System.out.println(i);
-        }
-        System.out.println(findSequence(numbers));
-
         Collection<String> names = new ArrayList();
-        names.add("Катя");
-        names.add("Женя");
-        names.add("Катя");
-        names.add("Женя");
+        names.add("Александр");
+        names.add("Григорий");
+        names.add("Дмитрий");
+        names.add("Александр");
+        names.add("Дмитрий");
+        names.add("Григорий");
+        names.add("Дмитрий");
+        names.add("Григорий");
+        names.add("Борис");
+        names.add("Дмитрий");
+        names.add("Григорий");
+        names.add("Дмитрий");
+        names.add("Григорий");
+        names.add("Григорий");
+
         System.out.println(findSimilar(names));
     }
 }
