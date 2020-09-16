@@ -22,6 +22,33 @@ public class Censor {
         }
     }
 
+    private static String censor(String word, String[] obscene) {
+        String symbols = "";
+        String prew = ""; // знаки препинания до слова
+        String postw = ""; // знаки препинания после слова
+
+        for (char c : word.toCharArray())
+            if (Character.isAlphabetic(c)) {
+                symbols = symbols + c;
+            } else if ("".equals(symbols)) {
+                prew = prew + c;
+            } else {
+                postw = postw + c;
+            }
+
+        for (int i = 0; i < obscene.length; i++) {
+            if (symbols.equals(obscene[i])) {
+                symbols = "";
+                for (int j = 0; j < obscene[i].length(); j++) {
+                    symbols = symbols + "*";
+                }
+                break;
+            }
+        }
+
+        return prew+symbols+postw;
+    }
+
     public static void censorFile(String inoutFileName, String[] obscene) throws CensorException {
         try {
             File fn = new File(inoutFileName);
@@ -29,40 +56,21 @@ public class Censor {
                 RandomAccessFile raf = new RandomAccessFile(fn, "rw");
                 while (scan.hasNext()) {
                     String word = scan.next();
-                    String repl = "";
-                    boolean wr = true;
-                    // для сравнения выделяем слово без знаков препинания
-                    String word2 = "";
-                    String prew = ""; // знаки препинания до слова
-                    String postw = ""; // знаки препинания после слова
-                    for (char c : word.toCharArray())
-                        if (Character.isAlphabetic(c)) {
-                            word2 = word2 + c;
-                        } else if ("".equals(word2)) {
-                            prew = prew + c;
-                        } else {
-                            postw = postw + c;
-                        } // слова через дефиз?
+                    String res;
+                    if (word.contains("-")) {
+                        String[] word2 = new String[2];
+                        int ind = word.indexOf("-");
+                        word2[0] = word.substring(0, ind);
+                        word2[1] = word.substring(ind+1);
+                        res = censor(word2[0], obscene) + "-" + censor(word2[1], obscene);
+                    } else {
+                        res = censor(word, obscene);
+                    }
 
-                    for (int i = 0; i < obscene.length; i++) {
-                        if (word2.equals(obscene[i])) {
-                            for (int j = 0; j < obscene[i].length(); j++) {
-                                repl = repl + "*";
-                            }
-                            if (scan.hasNext()) {
-                                repl = prew + repl + postw + " ";
-                            }
-                            raf.write(repl.getBytes());
-                            wr = false;
-                            break;
-                        }
+                    if (scan.hasNext()) {
+                        res = res + " ";
                     }
-                    if (wr) {
-                        if (scan.hasNext()) {
-                            word = word + " ";
-                        }
-                        raf.write(word.getBytes());
-                    }
+                    raf.write(res.getBytes());
                 }
                 raf.close();
             } catch (Exception e) {
@@ -75,14 +83,12 @@ public class Censor {
 
     public static void main(String[] args) {
         try (FileWriter writer = new FileWriter("D:\\123.txt")) {
-            writer.write("Java — язык программирования, " +
-                    "разработанный Sun Microsystems " +
-                    "(в последующем приобретённой Oracle).");
+            writer.write("I collect two-sided cards. Java супер)");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-        String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
+        String[] obscene = {"Java", "Oracle", "two", "Microsystems"};
 
         try {
             censorFile("D:\\123.txt", obscene);
