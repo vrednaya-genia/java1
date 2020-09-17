@@ -1,8 +1,7 @@
 package ru.progwards.java1.lessons.test;
 
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,6 +56,53 @@ public class Test1 {
         return list;
     }
 
+    public String invertWords(String sentence) {
+        String res = "";
+        String[] words = sentence.split("\\s");
+        for (int i=0; i<words.length; i++) {
+            res = res + words[words.length-1-i] + ".";
+        }
+        res = res.substring(0,res.length()-1);
+        return res;
+    }
+
+    public String setStars(String filename) throws IOException {
+        try (RandomAccessFile raf = new RandomAccessFile(filename, "rw")) {
+            String res = "";
+            long pos = 10;
+            while (raf.getFilePointer()<raf.length()) {
+                int temp = raf.read();
+                if (raf.getFilePointer() == pos) {
+                    raf.seek(pos-1);
+                    raf.writeBytes("*");
+                    pos = pos + 10;
+                    res = res + (char)temp;
+                }
+            }
+            return res;
+        } catch (Exception e) {
+            throw new IOException(e.getClass().getName());
+        }
+    }
+
+    public void scanLines() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            String str = scanner.nextLine();
+            while (!str.equals("/stop")) {
+                if (str.contains("как дела")) {
+                    System.out.println("Хорошо");
+                }
+                if (str.contains("Привет")) {
+                    System.out.println("Здравствуйте!");
+                }
+                if (!(str.contains("как дела")||str.contains("Привет"))) {
+                    System.out.println(str);
+                }
+                str = scanner.nextLine();
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         Test1 t1 = new Test1();
         /*
@@ -74,6 +120,17 @@ public class Test1 {
         }
         System.out.println(prec); //4.9E-324
         */
-        System.out.println(t1.lineCount("D:\\123.txt"));
+        //System.out.println(t1.lineCount("D:\\123.txt"));
+        //System.out.println(t1.invertWords("Буря мглою небо кроет"));
+
+        try (FileWriter writer = new FileWriter("D:\\123.txt")) {
+            writer.write("0123456789012345678A012345678B01");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println(t1.setStars("D:\\123.txt"));
+
+        //t1.scanLines();
     }
 }
