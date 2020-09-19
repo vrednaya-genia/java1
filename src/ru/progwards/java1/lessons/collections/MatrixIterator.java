@@ -29,16 +29,16 @@ public class MatrixIterator<T> implements Iterator<T> {
     }
 
     public static void main(String[] args) {
-        Integer[][] ar = new Integer[3][3];
+        Integer[][] ar = new Integer[2][3];
         ar[0][0]=1;
         ar[0][1]=2;
         ar[0][2]=3;
         ar[1][0]=4;
         ar[1][1]=5;
-        ar[1][2]=6;
-        ar[2][0]=7;
-        ar[2][1]=8;
-        ar[2][2]=9;
+//      ar[1][2]=6;
+        //ar[2][0]=7;
+        //ar[2][1]=8;
+//        ar[2][2]=9;
 
         MatrixIterator mi = new MatrixIterator(ar);
         while (mi.hasNext()) {
