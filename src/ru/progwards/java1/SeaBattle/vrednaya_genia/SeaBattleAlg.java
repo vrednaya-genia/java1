@@ -122,6 +122,7 @@ public class SeaBattleAlg {
     }
 
     public void battleAlgorithm(SeaBattle seaBattle) {
+        init(seaBattle);
         for (int y = 0; y < seaBattle.getSizeX(); y++) {
             for (int x = 0; x < seaBattle.getSizeY(); x++) {
                 if (field[x][y] == 'X') {
@@ -168,7 +169,6 @@ public class SeaBattleAlg {
         int result = 0;
         for (int i = 0; i < 1000; i++) {
             SeaBattle seaBattle = new SeaBattle();
-            alg.init(new SeaBattle());
             alg.battleAlgorithm(seaBattle);
             result += seaBattle.getResult();
         }
