@@ -2,10 +2,7 @@ package ru.progwards.java1.lessons.test;
 
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Test1 {
 
@@ -103,6 +100,34 @@ public class Test1 {
         }
     }
 
+    public Set<Integer> a2set(int[] a) {
+        Integer[] a1 = new Integer[a.length];
+        for (int i=0; i<a.length; i++) {
+            a1[i]=a[i];
+        }
+        Set<Integer> res = new HashSet<>();
+        for (int i=0; i<a.length; i++) {
+            res.add(a1[i]);
+        }
+        return res;
+    }
+
+//    public TreeSet<User> createSet() {
+//        TreeSet<User> treeSet = new TreeSet<>(new Comparator<User>() {
+//            @Override
+//            public int compare(User u1, User u2) {
+//                if (Integer.compare(u1.id, u2.id)==1) {
+//                    return -1;
+//                }
+//                if (Integer.compare(u1.id, u2.id)==-1) {
+//                    return 1;
+//                }
+//                return Integer.compare(u1.id, u2.id);
+//            }
+//        });
+//        return treeSet;
+//    }
+
     public static void main(String[] args) throws IOException {
         Test1 t1 = new Test1();
         /*
@@ -119,7 +144,7 @@ public class Test1 {
             d/=2;
         }
         System.out.println(prec); //4.9E-324
-        */
+
         //System.out.println(t1.lineCount("D:\\123.txt"));
         //System.out.println(t1.invertWords("Буря мглою небо кроет"));
 
@@ -130,7 +155,11 @@ public class Test1 {
         }
 
         System.out.println(t1.setStars("D:\\123.txt"));
-
+*/
         //t1.scanLines();
+
+        int[] a = {1,1,1,3,5,1};
+        System.out.println(t1.a2set(a));
+
     }
 }
