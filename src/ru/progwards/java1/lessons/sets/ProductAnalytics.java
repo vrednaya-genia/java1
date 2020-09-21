@@ -67,7 +67,7 @@ public class ProductAnalytics {
     // товары из products, которые есть только в одном магазине
     // симметричная разница товаров из всех магазинов
     public Set<Product> existOnlyInOne() { // нужно всегда минимум 2 магазина
-        Set<Product> res = new HashSet();
+        Set<Product> res = new HashSet(existAtListInOne());
         Set<Product> retain = new HashSet();
         Iterator<Shop> ish1 = shops.iterator();
 
@@ -76,20 +76,17 @@ public class ProductAnalytics {
         Shop sp2 = ish1.next();
         Set<Product> sp2set = new HashSet(sp2.getProducts());
 
-        res.addAll(sp1set);
-        res.addAll(sp2set);
         sp2set.retainAll(sp1set);
-        res.removeAll(sp2set);
+        retain.addAll(sp2set);
 
         while (ish1.hasNext()) {
             Shop spn = ish1.next();
             Set<Product> spnset = new HashSet(spn.getProducts());
+            spnset.retainAll(res);
             retain.addAll(spnset);
-            retain.retainAll(res);
-            spnset.removeAll(retain);
-            res.addAll(spnset);
         }
 
+        res.removeAll(retain);
         return res;
     }
 
