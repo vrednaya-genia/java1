@@ -79,15 +79,19 @@ public class ProductAnalytics {
         sp2set.retainAll(sp1set);
         retain.addAll(sp2set);
 
-        while (ish1.hasNext()) {
+        //while (ish1.hasNext()) {
             Shop spn = ish1.next();
             Set<Product> spnset = new HashSet(spn.getProducts());
             spnset.retainAll(res);
             retain.addAll(spnset);
-        }
+        //}
 
         res.removeAll(retain);
         return res;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("помогииииии");
     }
 
 }
