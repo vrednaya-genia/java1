@@ -1,5 +1,6 @@
 package ru.progwards.java1.lessons.sets;
 
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -67,29 +68,9 @@ public class ProductAnalytics {
     // товары из products, которые есть только в одном магазине
     // симметричная разница товаров из всех магазинов
     public Set<Product> existOnlyInOne() {
-        Set<Product> res = new HashSet();
-        Iterator<Shop> ish1 = shops.iterator();
-        Iterator<Shop> ish2 = shops.iterator();
-        while (ish1.hasNext()) {
-            Shop sp1 = ish1.next();
-            Set<Product> sp1set = new HashSet(sp1.getProducts());
-            while (ish2.hasNext()) {
-                Shop sp2 = ish2.next();
-                Set<Product> sp2set = new HashSet(sp2.getProducts());
-                // остаются только уникальные товары магазина
-                sp1set.removeAll(sp2set);
-                if (sp1set.isEmpty()) {
-                    break;
-                }
-            }
-
-            if (!sp1set.isEmpty()) {
-                Iterator<Product> ipr = sp1set.iterator();
-                while (ipr.hasNext()) {
-                    res.add(ipr.next());
-                }
-            }
-        }
+        Set<Product> res = new HashSet(existAtListInOne());
+        Set<Product> retain = new HashSet(existInAll());
+        res.removeAll(retain);
         return res;
     }
 
