@@ -49,139 +49,91 @@ public class SeaBattleAlg {
     }
 
     public void setDots(int x, int y) {
-        for (int i=-1; i<2; i++) {
-            for (int j=-1; j<2; j++) {
-                if (isIn(x+i, y+j) && field[x+i][y+j]==' ') {
-                    field[x + i][y + j] = '.';
-                }
-            }
-        }
-        field[x][y] = 'X';
-    }
-
-    public void toD2pals(int x, int y, SeaBattle seaBattle) {
-        SeaBattle.FireResult fireResult;
-        //1
-        if (isIn(x+1, y)) {
-            fireResult = seaBattle.fire(x+1, y);
-            if (fireResult == SeaBattle.FireResult.HIT) {
-                setDots(x+1, y);
-                newPaluba(x+1, y);
-                toDestroyed(x+1, y, seaBattle);
-            }
-            if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                setDots(x+1, y);
-                return;
-            }
-        }
-        //2
-        if (isIn(x, y+1)) {
-            fireResult = seaBattle.fire(x, y + 1);
-            if (fireResult == SeaBattle.FireResult.HIT) {
-                setDots(x, y+1);
-                newPaluba(x, y+1);
-                toDestroyed(x, y + 1, seaBattle);
-            }
-            if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                setDots(x, y+1);
-                return;
-            }
-        }
-        //3
-        if (isIn(x-1, y)) {
-            fireResult = seaBattle.fire(x-1, y);
-            if (fireResult == SeaBattle.FireResult.HIT) {
-                setDots(x-1, y);
-                newPaluba(x-1, y);
-                toDestroyed(x-1, y, seaBattle);
-            }
-            if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                setDots(x-1, y);
-                return;
-            }
-        }
-        //4
-        if (isIn(x, y-1)) {
-            fireResult = seaBattle.fire(x, y - 1);
-            if (fireResult == SeaBattle.FireResult.HIT) {
-                setDots(x, y-1);
-                newPaluba(x, y-1);
-                toDestroyed(x, y - 1, seaBattle);
-            }
-            if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                setDots(x, y-1);
-                return;
-            }
-        }
-    }
-
-    public void toD34pals(int x, int y, SeaBattle seaBattle) {
-        SeaBattle.FireResult fireResult;
-        if (hits[paluba-2][1]==hits[paluba-1][1]) { // vert
-            if (hits[paluba-1][0] - hits[paluba-2][0] > 0) {
-                if (isIn(x+1, y)) {
-                    fireResult = seaBattle.fire(x + 1, y);
-                    if (fireResult == SeaBattle.FireResult.HIT) {
-                        setDots(x + 1, y);
-                        newPaluba(x + 1, y);
-                        toDestroyed(x + 1, y, seaBattle);
-                    }
-                    if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                        setDots(x + 1, y);
-                        return;
-                    }
-                }
-            } else {
-                if (isIn(x-1, y)) {
-                    fireResult = seaBattle.fire(x - 1, y);
-                    if (fireResult == SeaBattle.FireResult.HIT) {
-                        setDots(x - 1, y);
-                        newPaluba(x - 1, y);
-                        toDestroyed(x - 1, y, seaBattle);
-                    }
-                    if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                        setDots(x - 1, y);
-                        return;
+        if (paluba==1) {
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if (isIn(x + i, y + j) && field[x + i][y + j] == ' ') {
+                        field[x + i][y + j] = '.';
                     }
                 }
             }
-        }
-        if (hits[paluba-2][0]==hits[paluba-1][0]) { // gorz
-            if (hits[paluba-1][1] - hits[paluba-2][1] > 0) {
-                if (isIn(x, y+1)) {
-                    fireResult = seaBattle.fire(x, y + 1);
-                    if (fireResult == SeaBattle.FireResult.HIT) {
-                        setDots(x, y + 1);
-                        newPaluba(x, y + 1);
-                        toDestroyed(x, y + 1, seaBattle);
-                    }
-                    if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                        setDots(x, y + 1);
-                        return;
+            field[x][y] = 'X';
+        } else {
+            for (int k=0; k<paluba; k++) {
+                int x1 = hits[k][0];
+                int y1 = hits[k][1];
+                for (int i = -1; i < 2; i++) {
+                    for (int j = -1; j < 2; j++) {
+                        if (isIn(x1 + i, y1 + j) && field[x1 + i][y1 + j] == ' ') {
+                            field[x1 + i][y1 + j] = '.';
+                        }
                     }
                 }
-            } else {
-                if (isIn(x, y-1)) {
-                    fireResult = seaBattle.fire(x, y - 1);
-                    if (fireResult == SeaBattle.FireResult.HIT) {
-                        setDots(x, y - 1);
-                        newPaluba(x, y - 1);
-                        toDestroyed(x, y - 1, seaBattle);
-                    }
-                    if (fireResult == SeaBattle.FireResult.DESTROYED) {
-                        setDots(x, y - 1);
-                        return;
-                    }
-                }
+                field[x1][y1] = 'X';
             }
         }
     }
 
     public void toDestroyed(int x, int y, SeaBattle seaBattle) {
+        SeaBattle.FireResult fireResult;
         if (paluba==1) {
-            toD2pals(x, y, seaBattle);
+            if (isIn(x+1, y) && field[x+1][y] == ' ') {
+                fireResult = seaBattle.fire(x+1, y);
+                if (fireResult == SeaBattle.FireResult.MISS) {
+                    field[x+1][y] = '*';
+                }
+                if (fireResult == SeaBattle.FireResult.HIT) {
+                    newPaluba(x+1, y);
+                    toDestroyed(x+1, y, seaBattle);
+                }
+                if (fireResult == SeaBattle.FireResult.DESTROYED) {
+                    newPaluba(x+1, y);
+                    return;
+                }
+            }
+            if (isIn(x, y+1) && field[x][y+1] == ' ') {
+                fireResult = seaBattle.fire(x, y + 1);
+                if (fireResult == SeaBattle.FireResult.MISS) {
+                    field[x][y+1] = '*';
+                }
+                if (fireResult == SeaBattle.FireResult.HIT) {
+                    newPaluba(x, y+1);
+                    toDestroyed(x, y + 1, seaBattle);
+                }
+                if (fireResult == SeaBattle.FireResult.DESTROYED) {
+                    newPaluba(x, y+1);
+                    return;
+                }
+            }
         } else {
-            toD34pals(x, y, seaBattle);
+            if (hits[paluba-2][1]==hits[paluba-1][1] && field[x+1][y] == ' ') { // vert
+                fireResult = seaBattle.fire(x + 1, y);
+                if (fireResult == SeaBattle.FireResult.MISS) {
+                    field[x+1][y] = '*';
+                }
+                if (fireResult == SeaBattle.FireResult.HIT) {
+                    newPaluba(x+1, y);
+                    toDestroyed(x+1, y, seaBattle);
+                }
+                if (fireResult == SeaBattle.FireResult.DESTROYED) {
+                    newPaluba(x+1, y);
+                    return;
+                }
+            }
+            if (hits[paluba-2][0]==hits[paluba-1][0] && field[x][y+1] == ' ') { // gorz
+                fireResult = seaBattle.fire(x, y+1);
+                if (fireResult == SeaBattle.FireResult.MISS) {
+                    field[x][y+1] = '*';
+                }
+                if (fireResult == SeaBattle.FireResult.HIT) {
+                    newPaluba(x, y+1);
+                    toDestroyed(x, y+1, seaBattle);
+                }
+                if (fireResult == SeaBattle.FireResult.DESTROYED) {
+                    newPaluba(x, y+1);
+                    return;
+                }
+            }
         }
     }
 
@@ -191,15 +143,16 @@ public class SeaBattleAlg {
             field[x][y] = '*';
         }
         if (fireResult == SeaBattle.FireResult.DESTROYED) {
+            paluba = 1;
             setDots(x, y);
             ships++;
         }
         if (fireResult == SeaBattle.FireResult.HIT) {
-            setDots(x, y);
             newHit();
             paluba = 0;
             newPaluba(x, y);
             toDestroyed(x, y, seaBattle);
+            setDots(x, y);
             ships++;
         }
     }
@@ -208,87 +161,55 @@ public class SeaBattleAlg {
         init(seaBattle);
         int x;
         int y;
-        for (int d = 3; d < seaBattle.getSizeX(); ) { // 4х палубные
-            x=d;
-            y=0;
-            while (x>=0) {
-                if (field[x][y] != '.' && field[x][y] != 'X') {
-                    shot(x, y, seaBattle);
+        for (int d = 0; d < seaBattle.getSizeX(); d++) { // по диагонали сверху слева змейкой
+            if (d%2==0) {
+                x=0;
+                y=d;
+                while (y>=0) {
+                    if (field[x][y] == ' ') {
+                        shot(x, y, seaBattle);
+                    }
+                    x++;
+                    y--;
                 }
-                x-=1;
-                y+=1;
+            } else {
+                x=d;
+                y=0;
+                while (x>=0) {
+                    if (field[x][y] == ' ') {
+                        shot(x, y, seaBattle);
+                    }
+                    x-=1;
+                    y+=1;
+                }
             }
-            d=d+4;
         }
-        for (int d = 2; d < seaBattle.getSizeY(); ) {
-            x=9;
-            y=d;
-            while (y<=9) {
-                if (field[x][y] != '.' && field[x][y] != 'X') {
-                    shot(x, y, seaBattle);
+        for (int d = 1; d < seaBattle.getSizeY(); d++) {
+            if (d%2==0) {
+                x=9;
+                y=d;
+                while (y<=9) {
+                    if (field[x][y] == ' ') {
+                        shot(x, y, seaBattle);
+                        if (ships == 10)
+                            return;
+                    }
+                    x--;
+                    y++;
                 }
-                x--;
-                y++;
-            }
-            d=d+4;
-        }
-        /////////////////////////////////////////////////////////////////////
-        for (int d = 1; d < seaBattle.getSizeX(); ) { // 3x палубные
-            x=d;
-            y=0;
-            while (x>=0) {
-                if (field[x][y] != '.' && field[x][y] != 'X') {
-                    shot(x, y, seaBattle);
+            } else {
+                x=d;
+                y=9;
+                while (x<=9) {
+                    if (field[x][y] == ' ') {
+                        shot(x, y, seaBattle);
+                        if (ships == 10)
+                            return;
+                    }
+                    x++;
+                    y--;
                 }
-                x-=1;
-                y+=1;
             }
-            d=d+4;
-            if (ships == 10)
-                return;
-        }
-        for (int d = 4; d < seaBattle.getSizeY(); ) {
-            x=9;
-            y=d;
-            while (y<=9) {
-                if (field[x][y] != '.' && field[x][y] != 'X') {
-                    shot(x, y, seaBattle);
-                }
-                x--;
-                y++;
-            }
-            d=d+4;
-            if (ships == 10)
-                return;
-        }
-        ///////////////////////////////////////////////////////////////////////
-        for (int d = 0; d < seaBattle.getSizeX(); ) { // остальные
-            x=0;
-            y=d;
-            while (y>=0) {
-                if (field[x][y] != '.' && field[x][y] != 'X') {
-                    shot(x, y, seaBattle);
-                }
-                x++;
-                y--;
-            }
-            d=d+2;
-            if (ships == 10)
-                return;
-        }
-        for (int d = 1; d < seaBattle.getSizeY(); ) {
-            x=d;
-            y=9;
-            while (x<=9) {
-                if (field[x][y] != '.' && field[x][y] != 'X') {
-                    shot(x, y, seaBattle);
-                }
-                x++;
-                y--;
-            }
-            d=d+2;
-            if (ships == 10)
-                return;
         }
     }
 
@@ -300,7 +221,10 @@ public class SeaBattleAlg {
         t.battleAlgorithm(seaBattle);
         System.out.println(seaBattle.getResult());
         for (int i = 0; i < seaBattle.getSizeY(); i++) {
-            System.out.println(t.field[i]);
+            for (int j=0; j<seaBattle.getSizeY(); j++) {
+                System.out.print(t.field[j][i]);
+            }
+            System.out.println(" ");
         }
     }
     static void comp() {

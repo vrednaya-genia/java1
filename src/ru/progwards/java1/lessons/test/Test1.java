@@ -53,6 +53,25 @@ public class Test1 {
         return list;
     }
 
+    public List<Integer> filter(List<Integer> list) {
+        int sum = 0;
+        ListIterator<Integer> li = list.listIterator();
+        while (li.hasNext()) {
+            Integer it = li.next();
+            sum += it;
+        }
+        sum /= 100;
+        ListIterator<Integer> li1 = list.listIterator();
+        while (li1.hasNext()) {
+            Integer it = li1.next();
+            if (it>sum) {
+                li1.remove();
+            }
+        }
+
+        return list;
+    }
+
     public String invertWords(String sentence) {
         String res = "";
         String[] words = sentence.split("\\s");
@@ -106,7 +125,7 @@ public class Test1 {
             a1[i]=a[i];
         }
         Set<Integer> res = new HashSet<>();
-        for (int i=0; i<a.length; i++) {
+        for (int i=0; i<a1.length; i++) {
             res.add(a1[i]);
         }
         return res;
@@ -126,6 +145,21 @@ public class Test1 {
 //            }
 //        });
 //        return treeSet;
+//    }
+
+//    String figDetect(Figure fig) {
+//        Square sq = new Square(1.0);
+//        Round rd = new Round(1.0);
+//
+//        if (fig != null && fig.getClass() == sq.getClass()) {
+//            Square ob = (Square) fig;
+//            return "Сторона квадрата "+ ob.getSide();
+//        } else if (fig != null && fig.getClass() == rd.getClass()) {
+//            Round ob = (Round) fig;
+//            return "Диаметр круга "+ ob.getDiameter();
+//        } else {
+//            return "Неизвестная фигура";
+//        }
 //    }
 
     public static void main(String[] args) throws IOException {

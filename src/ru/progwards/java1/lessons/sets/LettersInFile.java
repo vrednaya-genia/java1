@@ -3,6 +3,7 @@ package ru.progwards.java1.lessons.sets;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -11,15 +12,14 @@ public class LettersInFile {
         String result = "";
         TreeSet<Character> res = new TreeSet();
         try (FileInputStream reader = new FileInputStream(fileName)) {
-            byte[] b = reader.readAllBytes();
-            // на консоле крякозябры без этого
-            String byteConvert = new String(b, "UTF-8");
-            char[] ch = byteConvert.toCharArray();
-            for (int i=0; i<ch.length; i++) {
-                //char s = (char) b[i];
-                if (Character.isLetter(ch[i])) {
-                    res.add(ch[i]);
+            InputStreamReader test = new InputStreamReader(reader);
+            int b = test.read();
+            while (b != -1) {
+                char s = (char) b;
+                if (Character.isLetter(s)) {
+                    res.add(s);
                 }
+                b = test.read();
             }
             Iterator<Character> it = res.iterator();
             while (it.hasNext()) {
