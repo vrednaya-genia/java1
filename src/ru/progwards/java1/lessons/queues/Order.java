@@ -37,10 +37,10 @@ public class Order implements Comparable<Order> {
         }
         // если одного класса
         if (this.num>o.num) {
-            return -1;
+            return 1;
         }
         if (this.num<o.num) {
-            return 1;
+            return -1;
         }
 
         return 0;
