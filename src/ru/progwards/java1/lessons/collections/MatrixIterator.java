@@ -29,7 +29,7 @@ public class MatrixIterator<T> implements Iterator<T> {
     }
 
     public static void main(String[] args) {
-        Integer[][] ar = {{5,7}, {7,0,1}, {8}};;
+        Integer[][] ar = {{5,7}, {7,0,1}, {8}};
 
         MatrixIterator mi = new MatrixIterator(ar);
         while (mi.hasNext()) {

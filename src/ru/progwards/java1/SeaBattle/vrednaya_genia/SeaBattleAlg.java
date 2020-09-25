@@ -35,6 +35,7 @@ public class SeaBattleAlg {
                 hits[i][j] = 0;
             }
         }
+        paluba = 0;
     }
 
     public void newPaluba(int x, int y) {
@@ -149,7 +150,6 @@ public class SeaBattleAlg {
         }
         if (fireResult == SeaBattle.FireResult.HIT) {
             newHit();
-            paluba = 0;
             newPaluba(x, y);
             toDestroyed(x, y, seaBattle);
             setDots(x, y);
@@ -210,13 +210,36 @@ public class SeaBattleAlg {
                     y--;
                 }
             }
-        }
+        }                                                            // 167
+
+//        for (int y = 0; y < seaBattle.getSizeX(); y++) {
+//            for (int x = 0; x < seaBattle.getSizeY(); x++) {
+//                if (field[x][y] == ' ') {
+//                    shot(x, y, seaBattle);
+//                    if (ships == 10)
+//                        return;
+//                }
+//            }
+//        }                                                              // 160
+
+//        for (int d=1; d<=seaBattle.getSizeX(); d++) {
+//            for (int y = 0; y < d; y++) {
+//                for (int x = 0; x < d; x++) {
+//                    if (field[x][y] == ' ') {
+//                        shot(x, y, seaBattle);
+//                        if (ships == 10)
+//                            return;
+//                    }
+//                }
+//            }
+//        }                                                              // 161
+
     }
 
     // функция для отладки
     static void test() {
         System.out.println("Sea battle");
-        SeaBattle seaBattle = new SeaBattle(true);
+        SeaBattle seaBattle = new SeaBattle();
         SeaBattleAlg t = new SeaBattleAlg();
         t.battleAlgorithm(seaBattle);
         System.out.println(seaBattle.getResult());
