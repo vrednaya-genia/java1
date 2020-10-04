@@ -6,17 +6,20 @@ import java.util.Map;
 
 public class FiboMapCache {
     private Map<Integer, BigDecimal> fiboCache = new HashMap();
+    boolean isOn;
 
     public FiboMapCache(boolean cacheOn) {
         if (cacheOn) {
             fiboCache = new HashMap();
+            isOn = true;
         } else {
             clearCahe();
+            isOn = false;
         }
     }
 
     public BigDecimal fiboNumber(int n) {
-        if (fiboCache!=null) {                // cacheOn true
+        if (isOn) {                // cacheOn true
             if (fiboCache.containsKey(n)) {
                 return fiboCache.get(n);
             } else {
@@ -64,6 +67,7 @@ public class FiboMapCache {
         long start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
             test1.fiboNumber(i);
+            //test1.clearCahe();
         }
         long end = System.currentTimeMillis()-start;
         System.out.println("fiboNumber cacheOn=true время выполнения " + end);

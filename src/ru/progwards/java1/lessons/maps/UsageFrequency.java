@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class UsageFrequency {
     private String[] words;
 
-    public void processFile(String fileName) throws IOException {
+    public void processFile1(String fileName) throws IOException {
         words = new String[0];
         int wordsCount = 0;
         try {
@@ -30,6 +30,30 @@ public class UsageFrequency {
             }
         } catch (Exception e) {
             throw new IOException(e.getMessage());
+        }
+    }
+
+    public void processFile(String fileName) {
+        words = new String[0];
+        int wordsCount = 0;
+        try {
+            File fn = new File(fileName);
+            try (Scanner scan = new Scanner(fn)) {
+                while (scan.hasNext()) {
+                    String word = scan.next();
+                    wordsCount++;
+                    String[] temp = new String[words.length];
+                    System.arraycopy(words,0,temp,0,words.length);
+
+                    words = new String[wordsCount];
+                    System.arraycopy(temp,0,words,0,temp.length);
+                    words[wordsCount-1] = word;
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -97,12 +121,12 @@ public class UsageFrequency {
 
     public static void main(String[] args) {
         UsageFrequency test = new UsageFrequency();
-        try {
-            test.processFile("D:\\wiki.test.tokens");
-            //test.processFile(null);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        //try {
+            //test.processFile("D:\\wiki.test.tokens");
+            test.processFile("D:\\wi654ki.test.tokens");
+        //} catch (IOException e) {
+        //    System.out.println(e.getMessage());
+        //}
 
         System.out.println(test.getLetters());
         System.out.println(test.getWords());
