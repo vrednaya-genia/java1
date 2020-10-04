@@ -27,7 +27,7 @@ public class SalesInfo {
                         int data2 = Integer.parseInt(data[2].trim());
                         double data3 = Double.parseDouble(data[3]);;
                         fio.add(data[0]);
-                        names.add(data[1]);
+                        names.add(data[1].trim());
                         counts.add(data2);
                         sums.add(data3);
                     } catch (Exception e) {
