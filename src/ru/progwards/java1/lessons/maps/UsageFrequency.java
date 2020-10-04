@@ -12,18 +12,24 @@ public class UsageFrequency {
     public void processFile(String fileName) throws IOException {
         words = new String[0];
         int wordsCount = 0;
-        File fn = new File(fileName);
-        try (Scanner scan = new Scanner(fn)) {
-            while (scan.hasNext()) {
-                String word = scan.next();
-                wordsCount++;
-                String[] temp = new String[words.length];
-                System.arraycopy(words,0,temp,0,words.length);
+        try {
+            File fn = new File(fileName);
+            try (Scanner scan = new Scanner(fn)) {
+                while (scan.hasNext()) {
+                    String word = scan.next();
+                    wordsCount++;
+                    String[] temp = new String[words.length];
+                    System.arraycopy(words,0,temp,0,words.length);
 
-                words = new String[wordsCount];
-                System.arraycopy(temp,0,words,0,temp.length);
-                words[wordsCount-1] = word;
+                    words = new String[wordsCount];
+                    System.arraycopy(temp,0,words,0,temp.length);
+                    words[wordsCount-1] = word;
+                }
+            } catch (IOException e) {
+                throw new IOException(e.getMessage());
             }
+        } catch (Exception e) {
+            throw new IOException(e.getMessage());
         }
     }
 
@@ -51,7 +57,11 @@ public class UsageFrequency {
                 key2 = key2 + c;
             }
 
-        if (!"".equals(key2) && res.containsKey(key2)) {
+        if ("".equals(key2)) {
+            return;
+        }
+
+        if (res.containsKey(key2)) {
             res.put(key2, res.get(key2) + 1);
         } else {
             res.put(key2, 1);
@@ -88,13 +98,13 @@ public class UsageFrequency {
     public static void main(String[] args) {
         UsageFrequency test = new UsageFrequency();
         try {
-            //test.processFile("D:\\wiki.test.tokens");
-            test.processFile("D:\\wiki.train.tokens");
+            test.processFile("D:\\wiki.test.tokens");
+            //test.processFile(null);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
-        test.getLetters();
-        test.getWords();
+        System.out.println(test.getLetters());
+        System.out.println(test.getWords());
     }
 }

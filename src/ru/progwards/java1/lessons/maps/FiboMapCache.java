@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FiboMapCache {
-    private Map<Integer, BigDecimal> fiboCache;
+    private Map<Integer, BigDecimal> fiboCache = new HashMap();
 
     public FiboMapCache(boolean cacheOn) {
         if (cacheOn) {
             fiboCache = new HashMap();
         } else {
-            clearCache();
+            clearCahe();
         }
     }
 
@@ -55,7 +55,7 @@ public class FiboMapCache {
         return fNum;
     }
 
-    public void clearCache() {
+    public void clearCahe() {
         fiboCache = null;
     }
 
