@@ -9,30 +9,6 @@ import java.util.Scanner;
 public class UsageFrequency {
     private String[] words;
 
-    public void processFile1(String fileName) throws IOException {
-        words = new String[0];
-        int wordsCount = 0;
-        try {
-            File fn = new File(fileName);
-            try (Scanner scan = new Scanner(fn)) {
-                while (scan.hasNext()) {
-                    String word = scan.next();
-                    wordsCount++;
-                    String[] temp = new String[words.length];
-                    System.arraycopy(words,0,temp,0,words.length);
-
-                    words = new String[wordsCount];
-                    System.arraycopy(temp,0,words,0,temp.length);
-                    words[wordsCount-1] = word;
-                }
-            } catch (IOException e) {
-                throw new IOException(e.getMessage());
-            }
-        } catch (Exception e) {
-            throw new IOException(e.getMessage());
-        }
-    }
-
     public void processFile(String fileName) {
         words = new String[0];
         int wordsCount = 0;
@@ -61,7 +37,7 @@ public class UsageFrequency {
         Map<Character, Integer> res = new HashMap();
         for (int i=0; i<words.length; i++) {
             for (int j=0; j<words[i].length(); j++) {
-                Character key = Character.toLowerCase(words[i].charAt(j));
+                Character key = words[i].charAt(j);
                 if (Character.isLetter(key) || Character.isDigit(key)) {
                     if (res.containsKey(key)) {
                         res.put(key, res.get(key) + 1);
@@ -77,7 +53,7 @@ public class UsageFrequency {
     public void symbol(String key, Map<String, Integer> res) {
         String key2 = "";
         for (char c : key.toCharArray())
-            if (Character.isAlphabetic(c)) {
+            if (Character.isAlphabetic(c) || Character.isDigit(c)) {
                 key2 = key2 + c;
             }
 
@@ -95,25 +71,24 @@ public class UsageFrequency {
     public Map<String, Integer> getWords() {
         Map<String, Integer> res = new HashMap();
         for (int i=0; i<words.length; i++) {
-            String word = words[i].toLowerCase();
-            if (word.contains("-")) {
+            if (words[i].contains("-")) {
                 String[] word2 = new String[2];
-                int ind = word.indexOf("-");
-                word2[0] = word.substring(0, ind);
-                word2[1] = word.substring(ind+1);
+                int ind = words[i].indexOf("-");
+                word2[0] = words[i].substring(0, ind);
+                word2[1] = words[i].substring(ind+1);
 
                 symbol(word2[0], res);
                 symbol(word2[1], res);
-            } else if (word.contains("'")) {
+            } else if (words[i].contains("'")) {
                 String[] word2 = new String[2];
-                int ind = word.indexOf("'");
-                word2[0] = word.substring(0, ind);
-                word2[1] = word.substring(ind+1);
+                int ind = words[i].indexOf("'");
+                word2[0] = words[i].substring(0, ind);
+                word2[1] = words[i].substring(ind+1);
 
                 symbol(word2[0], res);
                 symbol(word2[1], res);
             } else {
-                symbol(word, res);
+                symbol(words[i], res);
             }
         }
         return res;
@@ -121,12 +96,9 @@ public class UsageFrequency {
 
     public static void main(String[] args) {
         UsageFrequency test = new UsageFrequency();
-        //try {
-            //test.processFile("D:\\wiki.test.tokens");
-            test.processFile("D:\\wi654ki.test.tokens");
-        //} catch (IOException e) {
-        //    System.out.println(e.getMessage());
-        //}
+
+        test.processFile("D:\\wiki.test.tokens");
+        //test.processFile("D:\\wi654ki.test.tokens");
 
         System.out.println(test.getLetters());
         System.out.println(test.getWords());

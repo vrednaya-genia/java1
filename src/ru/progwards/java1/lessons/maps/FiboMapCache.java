@@ -20,6 +20,9 @@ public class FiboMapCache {
 
     public BigDecimal fiboNumber(int n) {
         if (isOn) {                // cacheOn true
+            if (fiboCache == null) {
+                fiboCache = new HashMap();
+            }
             if (fiboCache.containsKey(n)) {
                 return fiboCache.get(n);
             } else {
@@ -67,7 +70,7 @@ public class FiboMapCache {
         long start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
             test1.fiboNumber(i);
-            //test1.clearCahe();
+            test1.clearCahe();
         }
         long end = System.currentTimeMillis()-start;
         System.out.println("fiboNumber cacheOn=true время выполнения " + end);
