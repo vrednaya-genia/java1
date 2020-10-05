@@ -10,36 +10,36 @@ public class FiboMapCache {
 
     public FiboMapCache(boolean cacheOn) {
         if (cacheOn) {
-            fiboCache = new HashMap();
             isOn = true;
         } else {
-            clearCahe();
             isOn = false;
         }
     }
 
     public BigDecimal fiboNumber(int n) {
         if (isOn) {                // cacheOn true
+            // но кеш не используется
             if (fiboCache == null) {
                 fiboCache = new HashMap();
-            }
-            if (fiboCache.containsKey(n)) {
-                return fiboCache.get(n);
-            } else {
                 if (n==1 || n==2) {
                     fiboCache.put(n, BigDecimal.ONE);
                     return BigDecimal.ONE;
                 }
-                if (fiboCache.containsKey(n-1) && fiboCache.containsKey(n-2)) {
-                    BigDecimal num = fiboCache.get(n-1).add(fiboCache.get(n-2));
-                    fiboCache.put(n, num);
-                    return num;
-                } else {
-                    long fNum = fiboNum(n);
-                    fiboCache.put(n, BigDecimal.valueOf(fNum));
-                    return BigDecimal.valueOf(fNum);
-                }
+                long fNum = fiboNum(n);
+                fiboCache.put(n, BigDecimal.valueOf(fNum));
+                return BigDecimal.valueOf(fNum);
             }
+            // кеш запоминается
+            //if (fiboCache.containsKey(n)) {
+            //    return fiboCache.get(n);
+            //}
+            if (n==1 || n==2) {
+                fiboCache.put(n, BigDecimal.ONE);
+                return BigDecimal.ONE;
+            }
+            BigDecimal num = fiboCache.get(n-1).add(fiboCache.get(n-2));
+            fiboCache.put(n, num);
+            return num;
         } else {                             // cacheOn false
             if (n==1 || n==2) {
                 return BigDecimal.ONE;
@@ -70,7 +70,7 @@ public class FiboMapCache {
         long start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
             test1.fiboNumber(i);
-            test1.clearCahe();
+            //test1.clearCahe();
         }
         long end = System.currentTimeMillis()-start;
         System.out.println("fiboNumber cacheOn=true время выполнения " + end);

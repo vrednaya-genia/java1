@@ -2,6 +2,8 @@ package ru.progwards.java1.lessons.test;
 
 
 import java.io.*;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class Test1 {
@@ -162,6 +164,11 @@ public class Test1 {
 //        }
 //    }
 
+    Instant createInstant() {
+        ZonedDateTime zdt = ZonedDateTime.parse("2020-01-01T15:00:00.000000001+03:00[Europe/Moscow]");
+        return Instant.from(zdt);
+    }
+
     public static void main(String[] args) throws IOException {
         Test1 t1 = new Test1();
         /*
@@ -192,8 +199,10 @@ public class Test1 {
 */
         //t1.scanLines();
 
-        int[] a = {1,1,1,3,5,1};
-        System.out.println(t1.a2set(a));
+        //int[] a = {1,1,1,3,5,1};
+        //System.out.println(t1.a2set(a));
+
+        t1.createInstant();
 
     }
 }
