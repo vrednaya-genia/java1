@@ -20,22 +20,18 @@ public class FiboMapCache {
             if (fiboCache.containsKey(n)) {
                 return fiboCache.get(n);
             }
-            if (n==1 || n==2) {
-                fiboCache.put(n, BigDecimal.ONE);
-                return BigDecimal.ONE;
-            }
             BigDecimal fn = fiboNum(n);
             fiboCache.put(n, fn);
             return fn;
         } else {                             // cacheOn false
-            if (n==1 || n==2) {
-                return BigDecimal.ONE;
-            }
             return fiboNum(n);
         }
     }
 
     public static BigDecimal fiboNum(int n) {
+        if (n==1 || n==2) {
+            return BigDecimal.ONE;
+        }
         BigDecimal fNum = BigDecimal.ZERO;
         BigDecimal fNum1 = BigDecimal.ONE;
         BigDecimal fNum2 = BigDecimal.ONE;
