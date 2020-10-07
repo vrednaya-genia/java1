@@ -24,14 +24,15 @@ public class FiboMapCache {
                 fiboCache.put(n, BigDecimal.ONE);
                 return BigDecimal.ONE;
             }
-            fiboCache.put(n, fiboNum(n));
+            BigDecimal fn = fiboNum(n);
+            fiboCache.put(n, fn);
+            return fn;
         } else {                             // cacheOn false
             if (n==1 || n==2) {
                 return BigDecimal.ONE;
             }
+            return fiboNum(n);
         }
-
-        return fiboNum(n);
     }
 
     public static BigDecimal fiboNum(int n) {

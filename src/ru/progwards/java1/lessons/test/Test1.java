@@ -2,8 +2,8 @@ package ru.progwards.java1.lessons.test;
 
 
 import java.io.*;
-import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Test1 {
@@ -126,6 +126,7 @@ public class Test1 {
         for (int i=0; i<a.length; i++) {
             a1[i]=a[i];
         }
+        //ArrayDeque<Integer> res = new ArrayDeque();
         Set<Integer> res = new HashSet<>();
         for (int i=0; i<a1.length; i++) {
             res.add(a1[i]);
@@ -167,6 +168,14 @@ public class Test1 {
     Instant createInstant() {
         ZonedDateTime zdt = ZonedDateTime.parse("2020-01-01T15:00:00.000000001+03:00[Europe/Moscow]");
         return Instant.from(zdt);
+    }
+
+    ZonedDateTime parseZDT(String str) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss.SSS Z zzzz").withZone(ZoneOffset.UTC);
+        ZoneId zone = ZoneId.of("Europe/Moscow");
+        OffsetDateTime odt = OffsetDateTime.parse(str, dtf);
+        ZonedDateTime zdt = odt.atZoneSameInstant(zone);
+        return zdt;
     }
 
     public static void main(String[] args) throws IOException {
