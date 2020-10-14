@@ -74,6 +74,9 @@ public class Insurance {
     }
 
     public boolean checkValid(ZonedDateTime dateTime) {
+        if (dateTime.isBefore(start)) {
+            return false;
+        }
         if (duration == null || dateTime.isEqual(start)) {
             return true;
         }
@@ -100,10 +103,10 @@ public class Insurance {
 
     public static void main(String[] args) {
         LocalDateTime ldt = LocalDateTime.of(2020, 1,1,10,10,10);
-        //Insurance t = new Insurance(ZonedDateTime.of(ldt, ZoneId.of("Europe/Moscow")));
-        Insurance t = new Insurance("2020-02-03T02:03:04", FormatStyle.LONG);
-        t.setDuration(12,5,5);
-        ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.of("Europe/Moscow"));
+        Insurance t = new Insurance(ZonedDateTime.parse("2021-01-22T21:42:14.548223+03:00[Europe/Moscow]"));
+        //Insurance t = new Insurance("2020-02-03T02:03:04", FormatStyle.LONG);
+        //t.setDuration(12,5,5);
+        ZonedDateTime zdt = ZonedDateTime.parse("2020-10-24T21:42:14.548249+03:00[Europe/Moscow]");
         System.out.println(t.checkValid(zdt));
         System.out.println(t.toString());
     }

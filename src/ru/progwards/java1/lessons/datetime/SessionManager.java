@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
 
 public class SessionManager {
     private Collection<UserSession> sessions;
@@ -15,34 +14,6 @@ public class SessionManager {
         this.sessionValid = sessionValid;
     }// sessionValid - период валидности сессии в секундах.
 
-    class UserSession {
-        private int sessionHandle;
-        private String userName;
-        private LocalDateTime lastAccess;
-
-        public UserSession(String userName) {
-            this.userName = userName;
-            sessionHandle = new Random().nextInt();
-            lastAccess = LocalDateTime.now();
-        }
-
-        int getSessionHandle() {
-            return sessionHandle;
-        }
-
-        String getUserName() {
-            return userName;
-        }
-
-        LocalDateTime getLastAccess() {
-            return lastAccess;
-        }
-
-        void updateLastAccess() { // обновляет время доступа к сессии
-            lastAccess = LocalDateTime.now();
-        }
-    }
-
     public void add(UserSession userSession) {
         userSession.updateLastAccess();
         sessions.add(userSession);
@@ -52,8 +23,8 @@ public class SessionManager {
         Iterator<UserSession> it = sessions.iterator();
         while (it.hasNext()) {
             UserSession temp = it.next();
-            if (userName.equals(temp.userName)) {
-                LocalDateTime AccessExp = temp.lastAccess.plusSeconds(sessionValid);
+            if (userName.equals(temp.getUserName())) {
+                LocalDateTime AccessExp = temp.getLastAccess().plusSeconds(sessionValid);
                 if (AccessExp.isAfter(LocalDateTime.now())) {
                     temp.updateLastAccess();
                     return temp;
@@ -69,8 +40,8 @@ public class SessionManager {
         Iterator<UserSession> it = sessions.iterator();
         while (it.hasNext()) {
             UserSession temp = it.next();
-            if (sessionHandle == temp.sessionHandle) {
-                LocalDateTime AccessExp = temp.lastAccess.plusSeconds(sessionValid);
+            if (sessionHandle == temp.getSessionHandle()) {
+                LocalDateTime AccessExp = temp.getLastAccess().plusSeconds(sessionValid);
                 if (AccessExp.isAfter(LocalDateTime.now())) {
                     temp.updateLastAccess();
                     return temp;
@@ -86,7 +57,7 @@ public class SessionManager {
         Iterator<UserSession> it = sessions.iterator();
         while (it.hasNext()) {
             UserSession temp = it.next();
-            if (sessionHandle == temp.sessionHandle) {
+            if (sessionHandle == temp.getSessionHandle()) {
                 it.remove();
                 break;
             }
@@ -97,7 +68,7 @@ public class SessionManager {
         Iterator<UserSession> it = sessions.iterator();
         while (it.hasNext()) {
             UserSession temp = it.next();
-            LocalDateTime AccessExp = temp.lastAccess.plusSeconds(sessionValid);
+            LocalDateTime AccessExp = temp.getLastAccess().plusSeconds(sessionValid);
             if (AccessExp.isBefore(LocalDateTime.now())) {
                 it.remove();
             }
@@ -106,28 +77,28 @@ public class SessionManager {
 
     public static void main(String[] args)  {
         SessionManager t = new SessionManager(5);
-        UserSession newOne = t.new UserSession("Eugenia");
+        UserSession newOne = new UserSession("Eugenia");
 
         if (t.find("Eugenia")==null) {
             t.add(newOne);
         }
-        t.get(newOne.sessionHandle);
-        t.get(newOne.sessionHandle);
+        t.get(newOne.getSessionHandle());
+        t.get(newOne.getSessionHandle());
         try {
             Thread.sleep(6000);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(t.get(newOne.sessionHandle));
+        System.out.println(t.get(newOne.getSessionHandle()));
 
-        UserSession newOne1 = t.new UserSession("Eugenia1");
+        UserSession newOne1 = new UserSession("Eugenia1");
         t.add(newOne1);
         try {
             Thread.sleep(2500);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        UserSession newOne2 = t.new UserSession("Eugenia2");
+        UserSession newOne2 = new UserSession("Eugenia2");
         t.add(newOne2);
         try {
             Thread.sleep(2500);
@@ -137,7 +108,7 @@ public class SessionManager {
         t.deleteExpired();
         System.out.println(t.sessions);
 
-        t.delete(newOne2.sessionHandle);
+        t.delete(newOne2.getSessionHandle());
         System.out.println(t.sessions);
     }
 }

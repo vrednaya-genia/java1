@@ -8,25 +8,6 @@ public class Profiler {
     static Map<String, Integer> counts = new HashMap<>(); // <ИмяСекции, КоличествоВходов>
     static Deque<String> qSections = new ArrayDeque<>();
 
-    static class StatisticInfo implements Comparable<StatisticInfo> {
-        public String sectionName; // имя секции
-        public int fullTime; // полное время выполнения секции в миллисекундах
-        public int selfTime; // чистое время выполнения секции в миллисекундах
-        public int count; // количество вызовов
-
-        StatisticInfo(String name, int ft, int st, int cnt) {
-            sectionName = name;
-            fullTime = ft;
-            selfTime = st;
-            count = cnt;
-        }
-
-        @Override
-        public int compareTo(StatisticInfo o) {
-            return sectionName.compareTo(o.sectionName);
-        }
-    }
-
     public static void enterSection(String name) {
         if (startTime.size()==0 || !startTime.containsKey(name)) {
             startTime.put(name, System.currentTimeMillis());
