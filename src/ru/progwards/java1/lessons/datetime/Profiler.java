@@ -24,36 +24,31 @@ public class Profiler {
     public static void exitSection(String name) {
         long fullTime = System.currentTimeMillis() - startTime.get(name);
         long selfTime = fullTime;
-        if (Sections.isEmpty()) {
-            StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
-            Sections.put(name, newSI);
-        } else {
-            long prevTime = 0;
-            boolean isNested = false;
-            while (!name.equals(qSections.peekFirst())) {
-                isNested = true;
-                String prevname = qSections.pollFirst();
-                StatisticInfo prev = Sections.get(prevname);
-                prevTime = prevTime + prev.fullTime;
-            }
-            if (isNested) {
-                if (Sections.containsKey(name)) {
-                    StatisticInfo val = Sections.get(name);
-                    fullTime += val.fullTime;
-                    selfTime = fullTime - prevTime;
-                } else {
-                    selfTime = selfTime - prevTime;
-                }
-            } else {
-                if (Sections.containsKey(name)) {
-                    StatisticInfo val = Sections.get(name);
-                    fullTime += val.fullTime;
-                    selfTime += val.selfTime;
-                }
-            }
-            StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
-            Sections.put(name, newSI);
+        long prevTime = 0;
+        boolean isNested = false;
+        while (!name.equals(qSections.peekFirst())) {
+            isNested = true;
+            String prevname = qSections.pollFirst();
+            StatisticInfo prev = Sections.get(prevname);
+            prevTime = prevTime + prev.fullTime;
         }
+        if (isNested) {
+            if (!Sections.isEmpty() && Sections.containsKey(name)) {
+                StatisticInfo val = Sections.get(name);
+                fullTime += val.fullTime;
+                selfTime = fullTime - prevTime;
+            } else {
+                selfTime = selfTime - prevTime;
+            }
+        } else {
+            if (!Sections.isEmpty() && Sections.containsKey(name)) {
+                StatisticInfo val = Sections.get(name);
+                fullTime += val.fullTime;
+                selfTime += val.selfTime;
+            }
+        }
+        StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
+        Sections.put(name, newSI);
     }
 
     public static List<StatisticInfo> getStatisticInfo() {
