@@ -26,7 +26,7 @@ public class Profiler {
         boolean isNested = false;
         StatisticInfo newSI;
         long fullTime = System.currentTimeMillis() - startTime.get(name);
-        if (Sections.containsKey(name)) {
+        if (Sections.size()!=0 && Sections.containsKey(name)) {
             StatisticInfo val = Sections.get(name);
             fullTime = val.fullTime + fullTime;
         }
@@ -39,9 +39,11 @@ public class Profiler {
             prevTime = prevTime + prev.fullTime;
         }
         selfTime = fullTime - prevTime;
-        if (Sections.containsKey(name) || !isNested) {
-            StatisticInfo val = Sections.get(name);
-            selfTime = val.selfTime + selfTime;
+        if (!isNested) {
+            if (Sections.size()!=0 && Sections.containsKey(name)) {
+                StatisticInfo val = Sections.get(name);
+                selfTime = val.selfTime + selfTime;
+            }
         }
 
         newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
