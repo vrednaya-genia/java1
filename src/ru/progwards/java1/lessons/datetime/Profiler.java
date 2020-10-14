@@ -24,27 +24,36 @@ public class Profiler {
     public static void exitSection(String name) {
         long fullTime = System.currentTimeMillis() - startTime.get(name);
         long selfTime = fullTime;
-        if (Sections.size()!=0 && Sections.containsKey(name)) {
-            StatisticInfo val = Sections.get(name);
-            fullTime += val.fullTime;
-        }
-        long prevTime = 0;
-        boolean isNested = false;
-        while (!name.equals(qSections.peekFirst())) {
-            isNested = true;
-            String prevname = qSections.pollFirst();
-            StatisticInfo prev = Sections.get(prevname);
-            prevTime = prevTime + prev.fullTime;
-        }
-        selfTime = selfTime - prevTime;
-        if (Sections.size()!=0 && Sections.containsKey(name)) {
-            if (!isNested) {
-                StatisticInfo val = Sections.get(name);
-                selfTime += val.selfTime;
+        if (Sections.isEmpty()) {
+            StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
+            Sections.put(name, newSI);
+        } else {
+            long prevTime = 0;
+            boolean isNested = false;
+            while (!name.equals(qSections.peekFirst())) {
+                isNested = true;
+                String prevname = qSections.pollFirst();
+                StatisticInfo prev = Sections.get(prevname);
+                prevTime = prevTime + prev.fullTime;
             }
+            if (isNested) {
+                if (Sections.containsKey(name)) {
+                    StatisticInfo val = Sections.get(name);
+                    fullTime += val.fullTime;
+                    selfTime = fullTime - prevTime;
+                } else {
+                    selfTime = selfTime - prevTime;
+                }
+            } else {
+                if (Sections.containsKey(name)) {
+                    StatisticInfo val = Sections.get(name);
+                    fullTime += val.fullTime;
+                    selfTime += val.selfTime;
+                }
+            }
+            StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
+            Sections.put(name, newSI);
         }
-        StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
-        Sections.put(name, newSI);
     }
 
     public static List<StatisticInfo> getStatisticInfo() {
@@ -70,6 +79,48 @@ public class Profiler {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        exitSection("Process1");
+        enterSection("Process1");
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        exitSection("Process1");
+        enterSection("Process1");
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        enterSection("Process2");
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        enterSection("Process3");
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        exitSection("Process3");
+        exitSection("Process2");
+        enterSection("Process2");
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        enterSection("Process3");
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        exitSection("Process3");
+        exitSection("Process2");
         exitSection("Process1");
 
         List<StatisticInfo> res = getStatisticInfo();
