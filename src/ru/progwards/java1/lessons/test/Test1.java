@@ -2,6 +2,8 @@ package ru.progwards.java1.lessons.test;
 
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -19,14 +21,13 @@ public class Test1 {
             return 0;
         }
     }
-
     public void testing() {
         PersonCompare personCompare = new PersonCompare () {
             @Override
             public int compare(Person p1, Person p2) {
                 return p1.name.compareTo(p2.name);
             }
-        } ;    
+        } ;
     }
 
     private int lineCount(String filename) throws IOException {
@@ -121,6 +122,14 @@ public class Test1 {
         }
     }
 
+    HashMap<Integer, String> a2map(int[] akey, String[] aval) {
+        HashMap<Integer, String> res = new HashMap();
+        for (int i=0; i<akey.length; i++) {
+            res.put(akey[i], aval[i]);
+        }
+        return res;
+    }
+
     public Set<Integer> a2set(int[] a) {
         Integer[] a1 = new Integer[a.length];
         for (int i=0; i<a.length; i++) {
@@ -132,6 +141,25 @@ public class Test1 {
             res.add(a1[i]);
         }
         return res;
+    }
+
+    void checkAndAdd(TreeMap<Integer, String> map, Integer key, String value) {
+        if (!map.isEmpty() && !map.containsKey(key)) {
+            if (key > map.firstKey() && key < map.lastKey()) {
+                map.put(key, value);
+            }
+        }
+    }
+
+    int fillHoles(Map<Integer, String> map, int size) {
+        int count = 0;
+        for (int i=1; i<=size; i++) {
+            if (!map.containsKey(i)) {
+                map.put(i, "Число "+i);
+                count++;
+            }
+        }
+        return count;
     }
 
 //    public TreeSet<User> createSet() {
@@ -178,15 +206,22 @@ public class Test1 {
         return zdt;
     }
 
+    String createFolder(String name) {
+        Path path1 = Paths.get(name);
+        path1 = path1.toAbsolutePath();
+        path1 = path1.getParent();
+        path1 = path1.getParent();
+        //System.out.println(path1);
+        return path1.toString();
+    }
+
     public static void main(String[] args) throws IOException {
         Test1 t1 = new Test1();
         /*
         System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
-
         double num = 2.45;
         num = num%1;
         System.out.println(num);
-
         double d = 1;
         double prec = d;
         while (d>0) {
@@ -194,24 +229,19 @@ public class Test1 {
             d/=2;
         }
         System.out.println(prec); //4.9E-324
-
         //System.out.println(t1.lineCount("D:\\123.txt"));
         //System.out.println(t1.invertWords("Буря мглою небо кроет"));
-
         try (FileWriter writer = new FileWriter("D:\\123.txt")) {
             writer.write("0123456789012345678A012345678B01");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         System.out.println(t1.setStars("D:\\123.txt"));
-*/
-        //t1.scanLines();
-
-        //int[] a = {1,1,1,3,5,1};
-        //System.out.println(t1.a2set(a));
-
+        t1.scanLines();
+        int[] a = {1,1,1,3,5,1};
+        System.out.println(t1.a2set(a));
         t1.createInstant();
-
+*/
+        System.out.println(t1.createFolder("abc"));
     }
 }
