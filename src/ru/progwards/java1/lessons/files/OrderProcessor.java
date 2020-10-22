@@ -150,10 +150,10 @@ public class OrderProcessor {
             Iterator<OrderItem> it2 = one.items.iterator();
             while (it2.hasNext()) {
                 OrderItem one2 = it2.next();
-                if (!res.isEmpty() && res.containsKey(one2.goodsName)) {
-                    res.put(one2.goodsName, res.get(one2.goodsName) + one2.price * one2.count);
+                if (!res.isEmpty() && res.containsKey(one2.googsName)) {
+                    res.put(one2.googsName, res.get(one2.googsName) + one2.price * one2.count);
                 } else {
-                    res.put(one2.goodsName, one2.price * one2.count);
+                    res.put(one2.googsName, one2.price * one2.count);
                 }
             }
         }

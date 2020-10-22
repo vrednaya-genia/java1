@@ -43,7 +43,7 @@ public class FilesSelect {
                                             System.out.println(e.getMessage() + " ошибка при создании каталога");
                                         }
                                     }
-                                    out = Paths.get(out.toString()+"\\"+nameFile.toString());
+                                    out = Paths.get(out.toString()+"/"+nameFile.toString());
                                     try {
                                         Files.copy(p, out, StandardCopyOption.REPLACE_EXISTING);
                                     } catch (IOException e) {
