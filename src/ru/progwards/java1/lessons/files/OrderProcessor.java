@@ -1,5 +1,6 @@
 package ru.progwards.java1.lessons.files;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -56,8 +57,8 @@ public class OrderProcessor {
                 try {
                     OrderItem one = new OrderItem();
                     one.googsName = item[0];
-                    one.count = Integer.parseInt(item[1]);
-                    one.price = Double.parseDouble(item[2]);
+                    one.count = Integer.parseInt(item[1].trim());
+                    one.price = Double.parseDouble(item[2].trim());
                     res.items.add(one);
                     res.sum += one.price * one.count;
                 } catch (Exception e) {
@@ -175,4 +176,19 @@ public class OrderProcessor {
         }
         return res;
     }
+
+    public static void main(String[] args) {
+        try (FileWriter writer = new FileWriter("D:\\test\\S02-P01X05-0002.csv")) {
+            writer.write("Пазл “Замок в лесу”, 1, 700");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        OrderProcessor t = new OrderProcessor("D:\\test");
+        t.loadOrders(null, null, null);
+
+        System.out.println(t.data);
+
+    }
+
 }
