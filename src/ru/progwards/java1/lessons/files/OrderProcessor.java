@@ -45,7 +45,6 @@ public class OrderProcessor {
             System.out.println(e.getMessage() + " ошибка при чтении атрибута:LastModifiedTime");
             return null;
         }
-
         res.items = null;
         res.sum = 0;
         try {
@@ -55,7 +54,10 @@ public class OrderProcessor {
             while (it.hasNext()) {
                 String[] item = it.next().split(",");
                 try {
-                    OrderItem one = new OrderItem(item[0], Integer.parseInt(item[1]), Double.parseDouble(item[2]));
+                    OrderItem one = new OrderItem();
+                    one.googsName = item[0];
+                    one.count = Integer.parseInt(item[1]);
+                    one.price = Double.parseDouble(item[2]);
                     res.items.add(one);
                     res.sum += one.price * one.count;
                 } catch (Exception e) {
@@ -67,7 +69,6 @@ public class OrderProcessor {
             System.out.println(e.getMessage() + " ошибка при чтении файла");
             return null;
         }
-
         return res;
     }
 
