@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.*;
 
 public class OrderProcessor {
@@ -40,8 +39,12 @@ public class OrderProcessor {
         res.customerId = fileName.substring(11, 15);
         try {
             FileTime lmt = Files.getLastModifiedTime(path);
-            ZonedDateTime zdt = ZonedDateTime.parse(lmt.toString());
-            res.datetime = zdt.toLocalDateTime();
+            Instant i = lmt.toInstant();
+            ZoneId defaultZone = ZoneId.of("Europe/Moscow");
+            LocalDateTime ldt = LocalDateTime.ofInstant(i, defaultZone);
+            res.datetime = ldt;
+            //ZonedDateTime zdt = ZonedDateTime.parse(lmt.toString());
+            //res.datetime = zdt.toLocalDateTime();
         } catch (IOException e) {
             System.out.println(e.getMessage() + " ошибка при чтении атрибута:LastModifiedTime");
             return null;
@@ -79,7 +82,6 @@ public class OrderProcessor {
         if (shopId==null) {
             pattern = "???";
         }
-
         PathMatcher pm = FileSystems.getDefault().getPathMatcher("glob:**/"+pattern+"-??????-????.csv");
         try {
             Files.walkFileTree(pathStorage, new SimpleFileVisitor<>() {
