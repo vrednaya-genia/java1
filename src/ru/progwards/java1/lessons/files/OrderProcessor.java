@@ -88,13 +88,21 @@ public class OrderProcessor {
                 @Override
                 public FileVisitResult visitFile(Path p, BasicFileAttributes attrs) {
                     if (pm.matches(p)) {
-                        Order one = fileProcess(p);
-                        if (one!=null) {
-                            if (isInPeriod(start, finish, one.datetime.toLocalDate())) {
-                                data.add(one);
+                        try {
+                            FileTime lmt = Files.getLastModifiedTime(p);
+                            Instant i = lmt.toInstant();
+                            ZoneId defaultZone = ZoneId.of("Europe/Moscow");
+                            LocalDateTime ldt = LocalDateTime.ofInstant(i, defaultZone);
+                            if (isInPeriod(start, finish, ldt.toLocalDate())) {
+                                Order one = fileProcess(p);
+                                if (one!=null) {
+                                    data.add(one);
+                                } else {
+                                    err++;
+                                }
                             }
-                        } else {
-                            err++;
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
                         }
                     }
                     return FileVisitResult.CONTINUE;
