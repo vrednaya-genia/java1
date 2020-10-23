@@ -31,24 +31,18 @@ public class OrderProcessor {
         return (one.isEqual(start) || one.isAfter(start)) && (one.isEqual(finish) || one.isBefore(finish));
     }
 
-    public Order fileProcess(Path path) {
+    public Order fileProcess(Path path) throws IOException {
         Order res = new Order();
         String fileName = path.getFileName().toString();
         res.shopId = fileName.substring(0, 3);
         res.orderId = fileName.substring(4, 10);
         res.customerId = fileName.substring(11, 15);
-        try {
-            FileTime lmt = Files.getLastModifiedTime(path);
-            Instant i = lmt.toInstant();
-            ZoneId defaultZone = ZoneId.of("Europe/Moscow");
-            LocalDateTime ldt = LocalDateTime.ofInstant(i, defaultZone);
-            res.datetime = ldt;
-            //ZonedDateTime zdt = ZonedDateTime.parse(lmt.toString());
-            //res.datetime = zdt.toLocalDateTime();
-        } catch (IOException e) {
-            System.out.println(e.getMessage() + " ошибка при чтении атрибута:LastModifiedTime");
-            return null;
-        }
+
+        FileTime lmt = Files.getLastModifiedTime(path);
+        Instant i = lmt.toInstant();
+        ZoneId defaultZone = ZoneId.of("Europe/Moscow");
+        res.datetime = LocalDateTime.ofInstant(i, defaultZone);
+
         res.items = null;
         res.sum = 0;
         try {
@@ -69,6 +63,13 @@ public class OrderProcessor {
                     return null;
                 }
             }
+
+            res.items.sort(new Comparator<OrderItem>() {
+                @Override
+                public int compare(OrderItem o1, OrderItem o2) {
+                    return o1.googsName.compareTo(o2.googsName);
+                }
+            });
         } catch (IOException e) {
             System.out.println(e.getMessage() + " ошибка при чтении файла");
             return null;

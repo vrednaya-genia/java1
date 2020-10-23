@@ -200,9 +200,9 @@ public class Test1 {
 
     ZonedDateTime parseZDT(String str) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss.SSS Z zzzz").withZone(ZoneOffset.UTC);
-        ZoneId zone = ZoneId.of("Europe/Moscow");
-        OffsetDateTime odt = OffsetDateTime.parse(str, dtf);
-        ZonedDateTime zdt = odt.atZoneSameInstant(zone);
+        //ZoneId zone = ZoneId.of("Europe/Moscow");
+        //OffsetDateTime odt = OffsetDateTime.parse(str, dtf);
+        ZonedDateTime zdt = ZonedDateTime.parse(str, dtf); //odt.atZoneSameInstant(zone);
         return zdt;
     }
 
@@ -242,6 +242,11 @@ public class Test1 {
         System.out.println(t1.a2set(a));
         t1.createInstant();
 */
-        System.out.println(t1.createFolder("abc"));
+        //System.out.println(t1.createFolder("abc"));
+        //System.out.println(t1.parseZDT("01.01.2020 16:27:14.444 +0300 Europe/Moscow"));
+        //Date date = new Date(86, 1, 28);
+        //System.out.println(new Date(86, 1, 28));
+        ZoneId zid1 = ZoneId.of("Europe/Moscow");
+        System.out.println(zid1.getRules().getOffset(Instant.now()));
     }
 }
