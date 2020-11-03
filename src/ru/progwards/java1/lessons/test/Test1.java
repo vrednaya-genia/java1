@@ -1,7 +1,7 @@
 package ru.progwards.java1.lessons.test;
 
-
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.*;
@@ -10,10 +10,19 @@ import java.util.*;
 
 public class Test1 {
 
-    class Person {
+    static class Person {
         public String name;
+        public Date birth;
+        public double salary;
+
         public Person(String name) {
             this.name = name;
+        }
+
+        Person(String name, Date birth, double salary) {
+            this.name = name;
+            this.birth = birth;
+            this. salary = salary;
         }
     }
     abstract class PersonCompare {
@@ -207,12 +216,62 @@ public class Test1 {
     }
 
     String createFolder(String name) {
+        File file = new File(name);
+        if (!file.exists()) {
+            if (file.mkdir()) {
+                //System.out.println("Directory is created!");
+            } else {
+                //System.out.println("Failed to create directory!");
+            }
+        }
         Path path1 = Paths.get(name);
+//        try {
+//            Files.createDirectory(path1);
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//        }
         path1 = path1.toAbsolutePath();
         path1 = path1.getParent();
         path1 = path1.getParent();
-        //System.out.println(path1);
         return path1.toString();
+    }
+
+    boolean replaceF(String name) {
+        boolean res = true;
+        try {
+            Path path1 = Paths.get(name);
+            String str = Files.readString(path1);
+            str = str.replace('F', 'f');
+            Files.writeString(path1, str);
+        } catch (IOException e) {
+            res = false;
+        }
+        return res;
+    }
+
+    String swapWords(String sentance) {
+        StringTokenizer st = new StringTokenizer(sentance, " .,-!\n");
+        String res = "";
+        while (st.hasMoreTokens()) {
+            if (st.countTokens()>=2) {
+                String t1 = st.nextToken();
+                String t2 = st.nextToken();
+                res += " " + t2 + " " + t1;
+            } else {
+                break;
+            }
+        }
+        if (st.hasMoreTokens()) {
+            res += " " + st.nextToken();
+        }
+
+        return res.trim();
+    }
+
+    void printPersons(Person[] persons) {
+        for (int i=0; i<persons.length; i++) {
+            System.out.format(new Locale("ru", "RU"), "|%1$-10s|%2$td/%2$tm/%2$tY|%3$,10.2f|", persons[i].name, persons[i].birth, persons[i].salary);
+        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -241,12 +300,19 @@ public class Test1 {
         int[] a = {1,1,1,3,5,1};
         System.out.println(t1.a2set(a));
         t1.createInstant();
-*/
-        //System.out.println(t1.createFolder("abc"));
-        //System.out.println(t1.parseZDT("01.01.2020 16:27:14.444 +0300 Europe/Moscow"));
-        //Date date = new Date(86, 1, 28);
-        //System.out.println(new Date(86, 1, 28));
+
+        System.out.println(t1.createFolder("abc"));
+        System.out.println(t1.parseZDT("01.01.2020 16:27:14.444 +0300 Europe/Moscow"));
+        Date date = new Date(86, 1, 28);
+        System.out.println(new Date(86, 1, 28));
         ZoneId zid1 = ZoneId.of("Europe/Moscow");
         System.out.println(zid1.getRules().getOffset(Instant.now()));
+  */
+
+        //System.out.println(t1.swapWords("Убитых словом, добивают молчанием. (c) Уильям Шекспир."));
+        Person[] a = new Person[1];
+        Date date = new Date(86, 1, 28);
+        a[0] = new Person("Вася", date, 200000.00);
+        t1.printPersons(a);
     }
 }
