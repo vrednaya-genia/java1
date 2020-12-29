@@ -307,12 +307,13 @@ public class Test1 {
         System.out.println(new Date(86, 1, 28));
         ZoneId zid1 = ZoneId.of("Europe/Moscow");
         System.out.println(zid1.getRules().getOffset(Instant.now()));
-  */
+
 
         //System.out.println(t1.swapWords("Убитых словом, добивают молчанием. (c) Уильям Шекспир."));
         Person[] a = new Person[1];
         Date date = new Date(86, 1, 28);
         a[0] = new Person("Вася", date, 200000.00);
         t1.printPersons(a);
+   */
     }
 }
