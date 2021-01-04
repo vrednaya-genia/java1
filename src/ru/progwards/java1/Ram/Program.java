@@ -20,7 +20,7 @@ public class Program {
     }
 
     void go() {
-        while (listOperator.getPointer()!=-1) {
+        while (listOperator.getPointer() != -1) {
             listOperator.get(listOperator.getPointer()).applyOp();
             // если нет оператора HALT
             if (listOperator.getPointer() == listOperator.size()) {
@@ -35,24 +35,28 @@ public class Program {
         while (it.hasNext()) {
             String line = it.next();
             line = line.toUpperCase().trim();
-            // пустые строки и комментарии
-            if ("".equals(line) || line.charAt(0)==';') {
+            // комментарии
+            if (line.contains(";")) {
+                int index = line.indexOf(";");
+                line = line.substring(0, index).trim();
+            }
+            // пустые строки
+            if ("".equals(line)) {
                 continue;
             }
             // метки
             if (line.contains(":")) {
                 int index = line.indexOf(":");
-                String labelName = line.substring(0,index);
+                String labelName = line.substring(0, index).trim();
                 labels.put(labelName, listOperator.size());
-                if (index+1 == line.length()) {
+                if (index + 1 == line.length()) {
                     continue;
                 } else {
-                    line = line.substring(index+1).trim();
+                    line = line.substring(index + 1).trim();
                 }
             }
             // остальное
             if (!defineOp(line)) {
-                System.out.println("Не известный синтаксис программы!");
                 return true;
             }
         }
@@ -64,7 +68,7 @@ public class Program {
         String op = "";
 
         int index = line.indexOf(" ");
-        if (index==-1) {
+        if (index == -1) {
             func = line;
         } else {
             func = line.substring(0, index).trim();

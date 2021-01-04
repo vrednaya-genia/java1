@@ -9,10 +9,10 @@ public class WriteOperator extends Operator {
     void applyOp() {
         if (type == Type.INPUT) {
             String[] ops = operand.split(" ");
-            for (int i=0; i<ops.length; i++) {
+            for (int i = 0; i < ops.length; i++) {
                 // проверка корректности входных данных
                 try {
-                   Integer temp = Integer.parseInt(ops[i]);
+                    Integer temp = Integer.parseInt(ops[i]);
                 } catch (Exception e) {
                     System.out.println("Произошла ошибка при выполнении программы (чтение входных данных)!");
                     data.listOperator.setPointer(-1);

@@ -14,10 +14,10 @@ public class ReadOperator extends Operator {
             return;
         }
         if (type == Type.READ) {
-            if (number< data.registers.size()) {
+            if (number < data.registers.size()) {
                 data.registers.set(number, data.inputs.get(data.inputs.getPointer()));
             } else {
-                for (int i = data.registers.size(); i<number; i++) {
+                for (int i = data.registers.size(); i < number; i++) {
                     data.registers.add(null);
                 }
                 data.registers.add(data.inputs.get(data.inputs.getPointer()));
@@ -25,10 +25,10 @@ public class ReadOperator extends Operator {
             data.inputs.nextPointer();
         }
         if (type == Type.STORE) {
-            if (number< data.registers.size()) {
+            if (number < data.registers.size()) {
                 data.registers.set(number, data.registers.get(0));
             } else {
-                for (int i = data.registers.size(); i<number; i++) {
+                for (int i = data.registers.size(); i < number; i++) {
                     data.registers.add(null);
                 }
                 data.registers.add(data.registers.get(0));

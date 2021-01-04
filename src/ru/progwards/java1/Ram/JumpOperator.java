@@ -18,13 +18,13 @@ public class JumpOperator extends Operator {
                     data.listOperator.setPointer(point);
                     return;
                 case JGTZ:
-                    if (data.registers.get(0)>0) {
+                    if (data.registers.get(0) > 0) {
                         data.listOperator.setPointer(point);
                         return;
                     }
                     break;
                 case JZ:
-                    if (data.registers.get(0)==0) {
+                    if (data.registers.get(0) == 0) {
                         data.listOperator.setPointer(point);
                         return;
                     }

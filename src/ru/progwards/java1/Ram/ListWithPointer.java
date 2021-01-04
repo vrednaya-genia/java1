@@ -9,11 +9,11 @@ public class ListWithPointer<T> extends ArrayList<T> {
         pointer++;
     }
 
-    public void setPointer(Integer pointer) {
-        this.pointer = pointer;
-    }
-
     public Integer getPointer() {
         return this.pointer;
+    }
+
+    public void setPointer(Integer pointer) {
+        this.pointer = pointer;
     }
 }

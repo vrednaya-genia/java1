@@ -1,15 +1,9 @@
 package ru.progwards.java1.Ram;
 
 abstract class Operator {
-    enum Type {ADD, SUB,
-        READ, STORE,
-        INPUT, WRITE, LOAD,
-        JMP, JGTZ, JZ, HALT}
-
     Type type;
     String operand;
     Program data;
-
     public Operator(Type type, String operand, Program data) {
         this.type = type;
         this.operand = operand;
@@ -24,7 +18,7 @@ abstract class Operator {
             return -1;
         }
         if (type == Type.READ || type == Type.STORE) {  // для ReadOperator
-            if (operand.charAt(0)=='*') {
+            if (operand.charAt(0) == '*') {
                 int iop = Integer.parseInt(operand.substring(1));
                 return data.registers.get(iop);
             } else {
@@ -44,4 +38,11 @@ abstract class Operator {
     }
 
     abstract void applyOp();
+
+    enum Type {
+        ADD, SUB,
+        READ, STORE,
+        INPUT, WRITE, LOAD,
+        JMP, JGTZ, JZ, HALT
+    }
 }
