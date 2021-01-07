@@ -34,6 +34,6 @@ public class ReadOperator extends Operator {
                 data.registers.add(data.registers.get(0));
             }
         }
-        data.listOperator.nextPointer();
+        super.applyOp();
     }
 }

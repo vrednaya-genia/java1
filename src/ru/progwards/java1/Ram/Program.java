@@ -125,10 +125,6 @@ public class Program {
     void go() {
         while (listOperator.getPointer() != -1) {
             listOperator.get(listOperator.getPointer()).applyOp();
-            // если нет оператора HALT
-            if (listOperator.getPointer() == listOperator.size()) {
-                listOperator.setPointer(-1);
-            }
         }
     }
 }

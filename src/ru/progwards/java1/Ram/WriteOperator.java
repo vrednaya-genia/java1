@@ -35,7 +35,7 @@ public class WriteOperator extends Operator {
         if (type == Type.LOAD) {
             data.registers.set(0, number);
         }
-        data.listOperator.nextPointer();
+        super.applyOp();
     }
 }
 

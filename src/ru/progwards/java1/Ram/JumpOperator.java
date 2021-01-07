@@ -34,6 +34,6 @@ public class JumpOperator extends Operator {
             System.out.println("Попытка перехода по несуществующей ссылке!");
             data.listOperator.setPointer(-1);
         }
-        data.listOperator.nextPointer();
+        super.applyOp();
     }
 }

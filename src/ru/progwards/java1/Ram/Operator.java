@@ -39,13 +39,11 @@ abstract class Operator {
         }
     }
 
-    abstract void applyOp();
-
-    // void applyOp() {
-    //      data.pointer++;
-    // если нет оператора HALT
-    //      if (data.pointer == data.listOperator.size()) {
-    //                data.pointer = -1;
-    //            }
-    // }
+    void applyOp() {
+        data.listOperator.nextPointer();
+        //если нет оператора HALT
+        if (data.listOperator.getPointer() == data.listOperator.size()) {
+            data.listOperator.setPointer(-1);
+        }
+    }
 }
