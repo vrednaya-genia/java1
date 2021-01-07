@@ -19,50 +19,7 @@ public class Program {
         listOperator.setPointer(0);
     }
 
-    void go() {
-        while (listOperator.getPointer() != -1) {
-            listOperator.get(listOperator.getPointer()).applyOp();
-            // если нет оператора HALT
-            if (listOperator.getPointer() == listOperator.size()) {
-                listOperator.setPointer(-1);
-            }
-        }
-    }
-
     //// предварительный анализ содержимого файла
-    boolean analyze(List<String> listStr) {
-        Iterator<String> it = listStr.iterator();
-        while (it.hasNext()) {
-            String line = it.next();
-            line = line.toUpperCase().trim();
-            // комментарии
-            if (line.contains(";")) {
-                int index = line.indexOf(";");
-                line = line.substring(0, index).trim();
-            }
-            // пустые строки
-            if ("".equals(line)) {
-                continue;
-            }
-            // метки
-            if (line.contains(":")) {
-                int index = line.indexOf(":");
-                String labelName = line.substring(0, index).trim();
-                labels.put(labelName, listOperator.size());
-                if (index + 1 == line.length()) {
-                    continue;
-                } else {
-                    line = line.substring(index + 1).trim();
-                }
-            }
-            // остальное
-            if (!defineOp(line)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     boolean defineOp(String line) {
         String func;
         String op = "";
@@ -78,13 +35,10 @@ public class Program {
         if (func.equals("JUMP")) {
             func = "JMP";
         }
-        if (func.equals("<INPUT>")) {
-            func = "INPUT";
-        }
 
         Operator operator;
         switch (func) {
-            case "INPUT":
+            case "<INPUT>":
                 operator = new WriteOperator(Operator.Type.INPUT, op, this);
                 listOperator.add(operator);
                 break;
@@ -129,8 +83,52 @@ public class Program {
                 listOperator.add(operator);
                 break;
             default:
+                System.out.println(func + " " + op);
                 return false;
         }
         return true;
+    }
+
+    boolean analyze(List<String> listStr) {
+        Iterator<String> it = listStr.iterator();
+        while (it.hasNext()) {
+            String line = it.next();
+            line = line.toUpperCase().trim();
+            // комментарии
+            if (line.contains(";")) {
+                int index = line.indexOf(";");
+                line = line.substring(0, index).trim();
+            }
+            // пустые строки
+            if ("".equals(line)) {
+                continue;
+            }
+            // метки
+            if (line.contains(":")) {
+                int index = line.indexOf(":");
+                String labelName = line.substring(0, index).trim();
+                labels.put(labelName, listOperator.size());
+                if (index + 1 == line.length()) {
+                    continue;
+                } else {
+                    line = line.substring(index + 1).trim();
+                }
+            }
+            // остальное
+            if (!defineOp(line)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void go() {
+        while (listOperator.getPointer() != -1) {
+            listOperator.get(listOperator.getPointer()).applyOp();
+            // если нет оператора HALT
+            if (listOperator.getPointer() == listOperator.size()) {
+                listOperator.setPointer(-1);
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 package ru.progwards.java1.Ram;
 
 abstract class Operator {
+    enum Type {ADD, SUB, READ, STORE, INPUT, WRITE, LOAD, JMP, JGTZ, JZ, HALT}
+
     Type type;
     String operand;
     Program data;
@@ -39,10 +41,11 @@ abstract class Operator {
 
     abstract void applyOp();
 
-    enum Type {
-        ADD, SUB,
-        READ, STORE,
-        INPUT, WRITE, LOAD,
-        JMP, JGTZ, JZ, HALT
-    }
+    // void applyOp() {
+    //      data.pointer++;
+    // если нет оператора HALT
+    //      if (data.pointer == data.listOperator.size()) {
+    //                data.pointer = -1;
+    //            }
+    // }
 }

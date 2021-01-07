@@ -20,5 +20,6 @@ public class MathOperator extends Operator {
             data.registers.set(0, data.registers.get(0) - number);
         }
         data.listOperator.nextPointer();
+        // super.applyOp();
     }
 }
