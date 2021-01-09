@@ -29,6 +29,9 @@ public class FruitBox<E extends Fruit> extends ArrayList<E> {
             fb.addAll(this);
             this.clear();
         } else {
+            if (fbIsEmpty) {
+                fb.clear();
+            }
             throw new Exception("UnsupportedOperationException");
         }
     }
