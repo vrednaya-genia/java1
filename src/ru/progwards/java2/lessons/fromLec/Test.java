@@ -1,4 +1,4 @@
-package ru.progwards.java2.lessons.tests;
+package ru.progwards.java2.lessons.fromLec;
 
 import java.util.ArrayList;
 import java.util.List;

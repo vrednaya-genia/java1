@@ -1,4 +1,4 @@
-package ru.progwards.java1.lessons.test;
+package ru.progwards.java1.lessons.fromLec;
 
 import java.io.*;
 import java.nio.file.Files;
