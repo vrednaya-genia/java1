@@ -3,17 +3,15 @@ package ru.progwards.java2.lessons.basetypes;
 import java.util.Iterator;
 
 public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
-    K[] keyTable;
-    V[] valueTable;
-    boolean[] deleted;
-    int initCapacity = 101;
-    int capacity;
-    int realSize;
+    private K[] keyTable;
+    private V[] valueTable;
+    private int capacity;
+    private int realSize;
 
-    DoubleHashTable() {
+    public DoubleHashTable() {
+        int initCapacity = 101;
         keyTable = (K[])new HashValue[initCapacity];
         valueTable = (V[])new Object[initCapacity];
-        deleted = new boolean[initCapacity];
         capacity = initCapacity;
         realSize = 0;
     }
@@ -39,7 +37,6 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         }
         keyTable = (K[])new HashValue[capacity];
         valueTable = (V[])new Object[capacity];
-        deleted = new boolean[capacity];
         realSize = 0;
 
         for (int i = 0; i < tempValueTable.length; i++) {
@@ -79,7 +76,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         int step = getHashDiv(k);
         int collision = 0;
         while (collision < capacity/10) {
-            if (valueTable[index] == null && !deleted[index]) {
+            if (valueTable[index] == null) {
                 keyTable[index] = key;
                 valueTable[index] = value;
                 realSize++;
@@ -116,7 +113,6 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         while (collision < capacity/10) {
             if (key.equals(keyTable[index])) {
                 valueTable[index] = null;
-                deleted[index] = true;
                 realSize--;
                 return;
             }
