@@ -2,13 +2,11 @@ package ru.progwards.java2.lessons.basetypes;
 
 import java.util.Iterator;
 
-// двунаправленный связный список
 public class BiDirList<T> implements Iterable<T> {
     private BiDirListItem<T> head;
     private BiDirListItem<T> tail;
     private int size = 0;
 
-    // добавить в конец списка
     public void addLast(T item) {
         BiDirListItem<T> li = new BiDirListItem<>(item);
         if (head==null) {
@@ -23,7 +21,6 @@ public class BiDirList<T> implements Iterable<T> {
         size++;
     }
 
-    // добавить в начало списка
     public void addFirst(T item) {
         BiDirListItem<T> li = new BiDirListItem<>(item);
         if (head==null) {
@@ -38,7 +35,6 @@ public class BiDirList<T> implements Iterable<T> {
         size++;
     }
 
-    // удалить
     public void remove(T item) {
         boolean isRemoved = false;
         BiDirListItem<T> cur = head;
@@ -61,7 +57,6 @@ public class BiDirList<T> implements Iterable<T> {
         }
     }
 
-    // получить элемент по индексу
     public T at(int i) {
         if (i>size-1) {
             System.out.println("Невозможно получить элемент по индексу " + i);
@@ -74,12 +69,10 @@ public class BiDirList<T> implements Iterable<T> {
         return cur.getItem();
     }
 
-    // получить количество элементов
     public int size() {
         return size;
     }
 
-    // конструктор из массива
     public static<T> BiDirList<T> from(T[] array) {
         BiDirList<T> res = new BiDirList<>();
         for (T t : array) {
@@ -88,7 +81,6 @@ public class BiDirList<T> implements Iterable<T> {
         return res;
     }
 
-    // конструктор из массива
     @SafeVarargs
     public static<T> BiDirList<T> of(T...array) {
         BiDirList<T> res = new BiDirList<>();
@@ -98,7 +90,6 @@ public class BiDirList<T> implements Iterable<T> {
         return res;
     }
 
-    // скопировать в массив
     public void toArray(T[] array) {
         if (array.length>=size) {
             BiDirListItem<T> cur = head;

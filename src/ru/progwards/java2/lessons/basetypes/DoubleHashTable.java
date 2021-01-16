@@ -65,7 +65,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
     int step(int index, int step) {
         index += step;
         if (index < 0) {
-            index = capacity-1 + index;
+            index += capacity-1;
         }
         if (index > capacity-1) {
             index -= capacity-1;
@@ -160,6 +160,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         }
         t.change(new IntKey(0), new IntKey(11));
 
+        System.out.println(t.toString());
         for (Integer integer : t) {
             System.out.println(integer);
         }
