@@ -1,10 +1,12 @@
 package ru.progwards.java2.lessons.basetypes;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
     private K[] keyTable;
     private V[] valueTable;
+    private boolean[] removed;
     private int capacity;
     private int realSize;
 
@@ -12,6 +14,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         int initCapacity = 101;
         keyTable = (K[])new HashValue[initCapacity];
         valueTable = (V[])new Object[initCapacity];
+        removed = new boolean[initCapacity];
         capacity = initCapacity;
         realSize = 0;
     }
@@ -30,21 +33,20 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         V[] tempValueTable = (V[])new Object[capacity];
         System.arraycopy(keyTable, 0, tempKeyTable, 0, capacity);
         System.arraycopy(valueTable, 0, tempValueTable, 0, capacity);
-
         capacity = 2*capacity;
         while (!isPrime(capacity)) {
             capacity++;
         }
         keyTable = (K[])new HashValue[capacity];
         valueTable = (V[])new Object[capacity];
+        removed = new boolean[capacity];
         realSize = 0;
-
         for (int i = 0; i < tempValueTable.length; i++) {
-           if (tempValueTable[i] != null) {
-               K key = tempKeyTable[i];
-               V value = tempValueTable[i];
-               add(key, value);
-           }
+            if (tempValueTable[i] != null) {
+                K key = tempKeyTable[i];
+                V value = tempValueTable[i];
+                add(key, value);
+            }
         }
     }
 
@@ -76,7 +78,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         int step = getHashDiv(k);
         int collision = 0;
         while (collision < capacity/10) {
-            if (valueTable[index] == null) {
+            if (valueTable[index] == null && !removed[index]) {
                 keyTable[index] = key;
                 valueTable[index] = value;
                 realSize++;
@@ -101,8 +103,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
             index = step(index, step);
             collision++;
         }
-        System.out.println("В таблице нет данных по ключу " + key.toString());
-        return null;
+        throw new NoSuchElementException("В таблице нет данных по ключу " + key.toString());
     }
 
     public void remove(K key) {
@@ -112,14 +113,16 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
         int collision = 0;
         while (collision < capacity/10) {
             if (key.equals(keyTable[index])) {
+                keyTable[index] = null;
                 valueTable[index] = null;
+                removed[index] = true;
                 realSize--;
                 return;
             }
             index = step(index, step);
             collision++;
         }
-        System.out.println("Удаление по ключу " + key.toString() + " невозможно!");
+        throw new NoSuchElementException("Объект " + key.toString() + " для удаления не найден.");
     }
 
     public void change(K key1, K key2) {

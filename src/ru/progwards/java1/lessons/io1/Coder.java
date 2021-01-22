@@ -54,11 +54,8 @@ public class Coder {
             }
         } catch (Exception e) {
             try {
-                FileWriter logFile = new FileWriter(logName);
-                try {
+                try (FileWriter logFile = new FileWriter(logName)) {
                     logFile.write(e.getMessage());
-                } finally {
-                    logFile.close();
                 }
             } catch (Exception e1) {
                 System.out.println("не судьба..");

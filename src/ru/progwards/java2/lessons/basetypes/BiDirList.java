@@ -1,6 +1,7 @@
 package ru.progwards.java2.lessons.basetypes;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class BiDirList<T> implements Iterable<T> {
     private BiDirListItem<T> head;
@@ -53,14 +54,13 @@ public class BiDirList<T> implements Iterable<T> {
             }
         }
         if (!isRemoved) {
-            System.out.println("Невозможо удалить объект " + item);
+            throw new NoSuchElementException("Объект для удаления не найден.");
         }
     }
 
     public T at(int i) {
         if (i>size-1) {
-            System.out.println("Невозможно получить элемент по индексу " + i);
-            return null;
+            throw new IndexOutOfBoundsException("Запрашивается индекс " + i + " при длине " + size + ".");
         }
         BiDirListItem<T> cur = head;
         for (int j=0; j<i; j++) {
@@ -90,7 +90,7 @@ public class BiDirList<T> implements Iterable<T> {
         return res;
     }
 
-    public void toArray(T[] array) {
+    public void toArray(T[] array) throws Exception {
         if (array.length>=size) {
             BiDirListItem<T> cur = head;
             for (int i = 0; i < size; i++) {
@@ -98,7 +98,7 @@ public class BiDirList<T> implements Iterable<T> {
                 cur = cur.getNext();
             }
         } else {
-            System.out.println("Невозможно скопировать в массив меньшей длины!");
+            throw new Exception("Невозможно скопировать в массив меньшей длины!");
         }
     }
 
@@ -108,7 +108,7 @@ public class BiDirList<T> implements Iterable<T> {
         return new BiDirListIterator<>(head);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         BiDirList<Integer> list = new BiDirList<>();
         list.addLast(1);
         list.addFirst(56);
