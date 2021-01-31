@@ -7,7 +7,7 @@ public class AsNumbersSum {
 
     public static String asNumbersSum2(int number) {
         if (number==2) {
-            return "1+1";
+            return "+1";
         }
         String res = number + "+1 = ";
         return res + asNumbersSum(number-1) + "+1";

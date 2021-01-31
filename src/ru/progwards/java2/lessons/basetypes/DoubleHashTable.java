@@ -154,7 +154,7 @@ public class DoubleHashTable<K extends HashValue, V> implements Iterable<V> {
 
     public static void main(String[] args) {
         DoubleHashTable<IntKey, Integer> t = new DoubleHashTable<>();
-        for (int i=0; i<12; i++) {
+        for (int i=0; i<212; i++) {
             t.add(new IntKey(2*i),i);
         }
         t.change(new IntKey(0), new IntKey(11));

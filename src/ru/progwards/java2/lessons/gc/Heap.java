@@ -1,17 +1,16 @@
 package ru.progwards.java2.lessons.gc;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Heap {
-    byte[] heap;
-    Map<Integer, Integer> bookedBlocks; // <указатель на блок, размер блока>
-    Map<Integer, Integer> freeBlocks;
+    private final byte[] heap;
+    private final Map<Integer, Integer> filledBlocks;
+    private final Map<Integer, Integer> freeBlocks;
 
     Heap(int maxHeapSize) {
         heap = new byte[maxHeapSize];
-        bookedBlocks = new TreeMap<>();
+        filledBlocks = new TreeMap<>();
         freeBlocks = new TreeMap<>();
         freeBlocks.put(0, maxHeapSize);
     }
@@ -20,10 +19,12 @@ public class Heap {
         for (Integer key : freeBlocks.keySet()) {
             Integer value = freeBlocks.get(key);
             if (value >= size) {
-                bookedBlocks.put(key, size);
+                filledBlocks.put(key, size);
                 freeBlocks.remove(key);
-                freeBlocks.put(key + size, value - size);
-                for (int i = key; i < key + size; i++) {
+                if (value > size) {
+                    freeBlocks.put(key + size, value - size);
+                }
+                for (int i = key; i < key+size; i++) {
                     heap[i] = 1;
                 }
                 return key;
@@ -52,14 +53,15 @@ public class Heap {
     }
 
     public void free(int ptr) throws InvalidPointerException {
-        if (!bookedBlocks.isEmpty()) {
-            if (bookedBlocks.containsKey(ptr)) {
-                Integer value = bookedBlocks.get(ptr);
+        if (!filledBlocks.isEmpty()) {
+            if (filledBlocks.containsKey(ptr)) {
+                Integer value = filledBlocks.get(ptr);
                 freeBlocks.put(ptr, value);
-                bookedBlocks.remove(ptr);
-                for (int i=ptr; i<ptr+value; i++) {
+                filledBlocks.remove(ptr);
+                for (int i = ptr; i < ptr+value; i++) {
                     heap[i] = 0;
                 }
+                defrag();
             } else {
                 throw new InvalidPointerException(ptr);
             }
@@ -75,8 +77,8 @@ public class Heap {
             Integer k1 = keys[i];
             Integer v1 = freeBlocks.get(k1);
             Integer k2 = keys[i+1];
-            Integer v2 = freeBlocks.get(k2);
             if (k1 + v1 == k2) {
+                Integer v2 = freeBlocks.get(k2);
                 freeBlocks.remove(k2);
                 freeBlocks.put(k1, v1 + v2);
                 i++;
@@ -85,42 +87,36 @@ public class Heap {
     }
 
     public void compact() {
+        //Map<Integer, Integer> tempBlocks = new TreeMap<>();
         Integer currKey = 0;
-        if (!bookedBlocks.isEmpty()) {
-            Iterator<Integer> iterator = bookedBlocks.keySet().iterator();
-            while (iterator.hasNext()) {
-                Integer key = iterator.next();
-                Integer value = bookedBlocks.get(key);
-                iterator.remove();
-                bookedBlocks.put(currKey, value);
+        if (!filledBlocks.isEmpty()) {
+            for (Integer value : filledBlocks.values()) {
+                //tempBlocks.put(currKey, value);
                 currKey += value;
             }
+            //filledBlocks.clear();
+            //filledBlocks.putAll(tempBlocks);
         }
         if (!freeBlocks.isEmpty()) {
             freeBlocks.clear();
-            freeBlocks.put(currKey, freeBlocks.size()-currKey);
+            freeBlocks.put(currKey, heap.length-currKey);
         }
         int count = 0;
-        for (int i=0; i<heap.length; i++) {
+        for (int i=0; i < heap.length; i++) {
             if (heap[i] == 1) {
                 heap[count++] = 1;
             }
         }
+        for (int i=count; i < heap.length; i++) {
+            heap[i] = 0;
+        }
     }
 
-    public static void main(String[] args) throws OutOfMemoryException, InvalidPointerException {
-        Heap h = new Heap(1_000_000_000);
-        h.malloc(100);
-        h.malloc(100);
-        h.malloc(100);
-        h.malloc(100);
-        h.malloc(100);
-        h.malloc(100);
-        h.malloc(100);
-        h.free(100);
-        h.free(300);
-        h.free(400);
-        h.defrag();
-        System.out.println();
+    public void getBytes(int ptr, byte[] bytes) {
+        //System.arraycopy(this.bytes, ptr, bytes, 0, size);
+    }
+
+    public void setBytes(int ptr, byte[] bytes) {
+        //System.arraycopy(bytes, 0, this.bytes, ptr, size);
     }
 }

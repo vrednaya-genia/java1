@@ -4,8 +4,8 @@ import java.util.ArrayDeque;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HeapTest {
-    static final int maxSize = 300_000_000;
-    //static final int maxSize = 1932735283;
+    static final int maxSize = 800_000_000;
+    //static final int maxSize = 1_932_735_283;
     static final int maxSmall = 10;
     static final int maxMedium = 100;
     static final int maxBig = 1000;
@@ -45,7 +45,7 @@ public class HeapTest {
 
         long start = System.currentTimeMillis();
         // alloc and free 30% random
-        while ((maxSize - allocated) > 50000) {
+        while ((maxSize - allocated) > 50_000) {
             long lstart, lstop;
             int size = getRandomSize();
             allocated += size;

@@ -1,104 +1,73 @@
 package ru.progwards.java2.lessons.recursion;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 public class HanoiTower {
-    private List<List<Integer>> towers;
+    private final Stack<Integer>[] towers;
+    private final int height;
     private int start;
-    private int height;
-    private boolean printOn = false;
+    private boolean printOn;
 
-    // инициализирует башню с size (size<10) кольцами (1..size). pos - номер начального штыря (0,1,2)
     public HanoiTower(int size, int pos) {
-        towers = new ArrayList<>();
         start = pos;
         height = size;
-        for (int i=0; i<=2; i++) {
-            towers.add(new ArrayList<>());
+        printOn = false;
+        towers = new Stack[3];
+        for (int i=0; i<3; i++) {
+            towers[i] = new Stack<>();
             if (i==pos) {
-                List<Integer> listI = towers.get(i);
-                for (int j=0; j<size; j++) {
-                    listI.add(size - j);
+                for (int j=0; j < height; j++) {
+                    towers[i].add(height - j);
                 }
             }
         }
     }
 
-    boolean change(int from, int to) {
-        Integer fromSize;
-        Integer toSize;
-
-        if (towers.get(from).size()!=0) {
-            fromSize = towers.get(from).get(towers.get(from).size()-1);
-        } else {
-            fromSize = 10;
-        }
-
-        if (towers.get(to).size()!=0) {
-            toSize = towers.get(to).get(towers.get(to).size() - 1);
-        } else {
-            toSize = 10;
-        }
-
-        if (fromSize<toSize) {
-            towers.get(from).remove(fromSize);
-            towers.get(to).add(fromSize);
-            return true;
-        }
-
-        return false;
+    int getLast(int from, int to) {
+        return 3 - (from + to);
     }
 
-    boolean isMoved(int to) {
-        return towers.get(to).size()==height;
+    void change(int from, int to, int last, int n) {
+        if (n > 0) {
+            change(from, last, to, n-1);
+            Integer fromSize = towers[from].pop();
+            towers[to].push(fromSize);
+            if (printOn)
+                print();
+            change(last, to, from, n-1);
+        }
     }
 
-    // переносит башню со штыря from на штырь to
     public void move(int from, int to) {
-        // печать текущего положения
-        if (printOn) {
-            print();
-        }
-
-        change(from, to);
-
-        if (isMoved(to)) {
+        if (from != start) {
+            System.out.println("Перемещение невозможно!");
             return;
         }
-
-        print();
-        //move();
+        change(from, to, getLast(from, to), height);
+        start = to;
     }
 
     void print() {
         String[] printArr = new String[height];
-        for (int i = 0; i< height; i++) {
+        for (int i = 0; i < height; i++) {
             printArr[i] = "";
         }
-
         int h = height;
         for (int i = 0; i < height; i++) {
-            for (int j = 0; j <= 2; j++) {
-                if (towers.get(j).size() > h-1) {
-                    printArr[i] = printArr[i] + "<00" + towers.get(j).get(h-1) + "> ";
+            for (int j = 0; j < 3; j++) {
+                if (towers[j].size() > h-1) {
+                    printArr[i] = printArr[i] + "<00" + towers[j].get(h-1) + "> ";
                 } else {
                     printArr[i] = printArr[i] + "  I   ";
                 }
             }
             h--;
         }
-
-        for (int i = 0; i< height; i++) {
+        for (int i = 0; i < height; i++) {
             System.out.println(printArr[i]);
         }
         System.out.println("=================");
     }
-//    каждое кольцо 5 символов - 3 символа добитых слева нулями, края <>
-//    пустой штырь - буква I (латинское И большое) - остальное пробелы
-//    между краями колец - один пробел
-//    высота всегда == size
-//    основание - символ "=", 17 шт
 
     void setTrace(boolean on) {
         printOn = on;
@@ -106,7 +75,11 @@ public class HanoiTower {
 
     public static void main(String[] args) {
         HanoiTower h = new HanoiTower(3, 0);
+        h.print();
         h.setTrace(true);
-        h.move(0, 2);
+        h.move(0, 1);
+        h.setTrace(false);
+        h.move(1, 2);
+        h.print();
     }
 }
