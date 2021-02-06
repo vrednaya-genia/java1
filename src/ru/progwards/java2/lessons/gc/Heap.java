@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Heap {
     private final byte[] heap;
-    private final NavigableMap<Integer, Integer> filledBlocks; // <ptr, size>
+    private final Map<Integer, Integer> filledBlocks; // <ptr, size>
     private final NavigableMap<Integer, Integer> freeBlocks; // <size, ptr>
     private final Map<Integer, Integer> codePtrs; // <testPtr, myPtr>
     private boolean isBeforeFirstCompact;
@@ -13,7 +13,7 @@ public class Heap {
 
     Heap(int maxHeapSize) {
         heap = new byte[maxHeapSize];
-        filledBlocks = new TreeMap<>();
+        filledBlocks = new HashMap<>();
         freeBlocks = new TreeMap<>();
         freeBlocks.put(maxHeapSize, 0);
         codePtrs = new HashMap<>();
