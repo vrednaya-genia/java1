@@ -71,19 +71,20 @@ public class Heap {
             }
             if (filledBlocks.containsKey(newPtr)) {
                 Integer size = filledBlocks.get(newPtr);
-                freeBlocks.add(new MyBlock(newPtr, size));
                 filledBlocks.remove(newPtr);
                 if (!isBeforeCompact) {
                     codePtrs.remove(ptr);
                 }
+                MyBlock block = new MyBlock(newPtr, size);
+                freeBlocks.add(block);
+                defrag(block);
+//                freed++;
+//                if (freed > 3) {
+//                    freed = 0;
+//                    defrag(block);
+//                }
                 for (int i = newPtr; i < newPtr+size; i++) {
                     heap[i] = 0;
-                }
-
-                freed++;
-                if (freed > 50) {
-                    freed = 0;
-                    defrag();
                 }
             } else {
                 throw new InvalidPointerException(ptr);
@@ -93,29 +94,29 @@ public class Heap {
         }
     }
 
-    public void defrag() {
+    public void defrag(MyBlock block) {
         NavigableSet<MyBlock> freetemp = new TreeSet<>(Comparator.comparingInt(m -> m.ptr));
-        //freetemp.addAll(freeBlocks);
-        for (MyBlock block : freeBlocks) {
-            freetemp.add(block);
+        freetemp.addAll(freeBlocks);
+        MyBlock left = freetemp.lower(block);
+        MyBlock right = freetemp.higher(block);
+
+        if (left == null && right == null) {
+            return;
         }
-        MyBlock[] blocks = new MyBlock[freetemp.size()];
-        freetemp.toArray(blocks);
-        for (int i=0; i < blocks.length-1; i++) {
-            int newPtr = blocks[i].ptr;
-            if (blocks[i].ptr + blocks[i].size == blocks[i+1].ptr) {
-                int newSize = blocks[i].size + blocks[i+1].size;
-                freeBlocks.remove(blocks[i]);
-                freeBlocks.remove(blocks[i+1]);
-                i++;
-                while (blocks[i].ptr + blocks[i].size == blocks[i+1].ptr) {
-                    newSize += blocks[i+1].size;
-                    freeBlocks.remove(blocks[i+1]);
-                    i++;
-                }
-                freeBlocks.add(new MyBlock(newPtr, newSize));
-            }
+
+        int newPtr = block.ptr;
+        int newSize = block.size;
+        freeBlocks.remove(block);
+        if (left != null && left.ptr + left.size == block.ptr) {
+            newPtr = left.ptr;
+            newSize += left.size;
+            freeBlocks.remove(left);
         }
+        if (right != null && block.ptr + block.size == right.ptr) {
+            newSize += right.size;
+            freeBlocks.remove(right);
+        }
+        freeBlocks.add(new MyBlock(newPtr, newSize));
     }
 
     public void compact() {
