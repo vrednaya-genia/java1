@@ -10,11 +10,15 @@ public class Recursion2 {
     }
 
     public static String getVariants(int n, int i, String p) {
-        return (n <= 0 ? "" :
-                (i > n ? getVariants(n, i - n, p + n + plSign) :
-                        eqSign + p + n + plSign + i + getVariants(i - 1, 1, p + n + plSign)
-                ) + getVariants(n - 1, i + 1, p)
-        );
+        return
+                (n <= 0 ? "" :
+                        (i > n
+                                ? getVariants(n, i - n, p + n + plSign)
+                                : eqSign + p + n + plSign + i
+                                + getVariants(i - 1, 1, p + n + plSign)
+                        )
+                                + getVariants(n - 1, i + 1, p)
+                );
     }
 
     // Internet

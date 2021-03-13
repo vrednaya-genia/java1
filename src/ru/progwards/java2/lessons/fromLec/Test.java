@@ -1,5 +1,9 @@
 package ru.progwards.java2.lessons.fromLec;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -73,6 +77,27 @@ public class Test {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @interface AnnotationTest {
+        String text() default "Всегда говори привет";
+    }
+    class Greetings {
+        void hello() {}
+        void goodday() {}
+        void goodnight() {}
+        void hi() {}
+    }
+    void printAnnotation() {
+        Method[] methods = Greetings.class.getDeclaredMethods();
+        for (Method m : methods) {
+            if (m.isAnnotationPresent(AnnotationTest.class)) {
+                AnnotationTest annotation = m.getAnnotation(AnnotationTest.class);
+                System.out.println(m.getName() + " " + annotation.text());
+            }
+        }
     }
 
     public static void main(String[] args) {
