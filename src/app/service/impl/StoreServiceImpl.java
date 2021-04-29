@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class StoreServiceImpl implements StoreService {
-
-
     @Override
     public Account get(String id) {
         Account account = Store.getStore().get(id);
@@ -21,7 +19,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Collection<Account> get() {
-        if(Store.getStore().size() == 0){
+        if (Store.getStore().size() == 0) {
             throw new RuntimeException("Store is empty");
         }
         return Store.getStore().values();
@@ -29,15 +27,19 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public void delete(String id) {
-        if (Store.getStore().get(id) == null){
+        if (Store.getStore().get(id) == null) {
             throw new RuntimeException("Account not found by id:"+id);
         }
-        Store.getStore().remove(id);
+        synchronized (Store.getStore()) {
+            Store.getStore().remove(id);
+        }
     }
 
     @Override
     public void insert(Account account) {
-        Store.getStore().put(account.getId(), account);
+        synchronized (Store.getStore()) {
+            Store.getStore().put(account.getId(), account);
+        }
     }
 
     @Override
@@ -45,7 +47,8 @@ public class StoreServiceImpl implements StoreService {
         if (Store.getStore().get(account.getId()) == null){
             throw new RuntimeException("Account not found by id:"+account.getId());
         }
-        this.insert(account);
+        synchronized (Store.getStore()) {
+            this.insert(account);
+        }
     }
-
 }

@@ -1,11 +1,9 @@
 package app.model;
 
-
 import java.util.Date;
 
 //POJO
 public class Account {
-
     private String id;
     private String holder;
     private Date date;

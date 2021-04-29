@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Store {
-
     private static Map<String, Account> store = new HashMap<>();
 
     static {
