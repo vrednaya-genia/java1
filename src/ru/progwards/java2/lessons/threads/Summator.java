@@ -6,12 +6,12 @@ public class Summator {
     static class MyThread extends Thread {
         int n;
         int m;
-        int s;
+        long s;
 
         MyThread(int n, int m) {
             this.n = n;
             this.m = m;
-            this.s = 0;
+            this.s = 0l;
         }
 
         @Override
@@ -58,7 +58,19 @@ public class Summator {
     }
 
     public static void main(String[] args) {
-        Summator summator = new Summator(2);
-        System.out.println(summator.sum(BigInteger.valueOf(10)));
+        int num = 1356543;
+        long l = 0;
+        for (int i = 0; i <= num; i++) {
+            l = l + i;
+        }
+        System.out.println("long   = " + l);
+
+        int tr = 100_000;
+        Summator test = new Summator(tr);
+        System.out.println("result = " + test.sum(BigInteger.valueOf(num)) + "   потоков - " + tr);
+
+        tr = 2;
+        test = new Summator(tr);
+        System.out.println("result = " + test.sum(BigInteger.valueOf(num)) + "   потоков - " + tr);
     }
 }

@@ -2,13 +2,13 @@ package app;
 
 import app.model.Account;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.FileWriter;
+import java.util.*;
 
 public class Store {
     private static Map<String, Account> store = new HashMap<>();
+    private static final String storeFile = "D:\\store.csv";
+    //private static final Collection<Account> accounts;
 
     static {
         for (int i = 0; i < 10 ; i++) {
@@ -21,7 +21,26 @@ public class Store {
             acc.setAmount(Math.random()*1_000_000);
 
             store.put(acc.getId(), acc);
+
+            try {
+                FileWriter writer = new FileWriter(storeFile);
+                writer.write(acc.toString());
+                writer.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
+
+//        accounts = store.values();
+//        try {
+//            FileWriter writer = new FileWriter(storeFile);
+//            for (Account acc : accounts) {
+//                writer.write(acc.toString());
+//            }
+//            writer.close();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
     }
 
     public static Map<String, Account> getStore(){

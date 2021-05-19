@@ -49,4 +49,8 @@ public class Account {
     public void setPin(int pin) {
         this.pin = pin;
     }
+
+    public String toString() {
+        return id + ", " + holder + ", " + date + ", " + amount + ", " + pin;
+    }
 }
