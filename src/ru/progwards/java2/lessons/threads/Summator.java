@@ -11,7 +11,7 @@ public class Summator {
         MyThread(int n, int m) {
             this.n = n;
             this.m = m;
-            this.s = 0l;
+            this.s = 0L;
         }
 
         @Override

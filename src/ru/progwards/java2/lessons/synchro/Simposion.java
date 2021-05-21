@@ -1,44 +1,58 @@
 package ru.progwards.java2.lessons.synchro;
 
 public class Simposion {
-    // количество философов и вилок
-    private static final int COUNT = 5;
+    private static final long time = 7000; // время теста (мс)
+    private static final int N = 5; // количество философов и вилок
+    private final Thread[] threads = new Thread[N];
+    private final Philosopher[] philosophers = new Philosopher[N];
 
     Simposion(long reflectTime, long eatTime) {
-        Fork[] forks = new Fork[COUNT];
-        for (int i=0; i < COUNT; i++) {
+        Fork[] forks = new Fork[N];
+        for (int i = 0; i < N; i++) {
             forks[i] = new Fork();
         }
 
-        Thread[] philosophers = new Thread[COUNT];
-        for (int i = 0; i < COUNT-1; i++) {
-            philosophers[i] = new Thread(new Philosopher("Ф"+(i+1), forks[i], forks[i+1], reflectTime, eatTime));
+        for (int i = 0; i < N-1; i++) {
+            philosophers[i] = new Philosopher("Ф"+(i+1), forks[i], forks[i+1], reflectTime, eatTime);
+            threads[i] = new Thread(philosophers[i]);
         }
-        philosophers[COUNT-1] = new Thread(new Philosopher("Ф"+COUNT, forks[COUNT-1], forks[0], reflectTime, eatTime));
-
-        // запустить потоки
+        philosophers[N-1] = new Philosopher("Ф"+ N, forks[N-1], forks[0], reflectTime, eatTime);
+        threads[N-1] = new Thread(philosophers[N-1]);
     }
 
-    // запускает философскую беседу
     void start() {
-
+        for (int i = 0; i < N; i++) {
+            threads[i].start();
+        }
     }
 
-    // завершает философскую беседу
     void stop() {
-
+        for (int i = 0; i < N; i++) {
+            threads[i].interrupt();
+        }
     }
 
-    //печатает результаты беседы в формате
-    //Философ name, ел ххх, размышлял xxx
-    //где ххх время в мс
     void print() {
+        for (int i = 0; i < N; i++) {
+            System.out.println(philosophers[i].getInfo());
+        }
+    }
 
+    void test() {
+        try {
+            start();
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        stop();
+        print();
     }
 
     public static void main(String[] args) {
-        // тест для философской беседы. Проверить варианты,
-        // когда ресурсов (вилок) достаточно (философы долго размышляют и мало едят) и
-        // вариант когда не хватает (философы много едят и мало размышляют)
+        Simposion s1 = new Simposion(1100, 600);
+        //Simposion s2 = new Simposion(600, 1100);
+        s1.test();
+        //s2.test();
     }
 }

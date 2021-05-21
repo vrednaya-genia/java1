@@ -1,6 +1,28 @@
 package ru.progwards.java2.lessons.synchro;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+
+class InvalidPointerException extends Exception {
+    InvalidPointerException(int ptr) {
+        super("Неверный указатель! " + ptr + " не является началом блока!");
+    }
+}
+class OutOfMemoryException extends Exception {
+    OutOfMemoryException(int size) {
+        super("Нет свободного блока размера " + size);
+    }
+}
+class MyBlock {
+    public int ptr;
+    public int size;
+
+    public MyBlock(int ptr, int size) {
+        this.ptr = ptr;
+        this.size = size;
+    }
+}
 
 public class Heap {
     private final byte[] heap;
@@ -8,16 +30,14 @@ public class Heap {
     private final NavigableSet<MyBlock> freeBlocks;
     private final Map<Integer, Integer> codePtrs; // <testPtr, myPtr>
     private boolean isBeforeCompact;
-    private int freed;
 
     Heap(int maxHeapSize) {
         heap = new byte[maxHeapSize];
-        filledBlocks = new HashMap<>();
-        freeBlocks = new TreeSet<>(Comparator.comparingInt(m -> m.size));
+        filledBlocks = new ConcurrentHashMap<>();
+        freeBlocks = new ConcurrentSkipListSet<>(Comparator.comparingInt(m -> m.size));
         freeBlocks.add(new MyBlock(0, maxHeapSize));
-        codePtrs = new HashMap<>();
+        codePtrs = new ConcurrentHashMap<>();
         isBeforeCompact = true;
-        freed = 0;
     }
 
     int findToMalloc(int size) {
@@ -78,11 +98,7 @@ public class Heap {
                 MyBlock block = new MyBlock(newPtr, size);
                 freeBlocks.add(block);
                 defrag(block);
-//                freed++;
-//                if (freed > 3) {
-//                    freed = 0;
-//                    defrag(block);
-//                }
+
                 for (int i = newPtr; i < newPtr+size; i++) {
                     heap[i] = 0;
                 }

@@ -1,8 +1,8 @@
 package ru.progwards.java2.lessons.threads;
 
 public class PrintScan {
-    public static final Integer t1 = 50;
-    public static final Integer t2 = 70;
+    public final static Integer t1 = 50;
+    public final static Integer t2 = 70;
     public static Integer p = 1;
 
     public static void print(String name, int pages) {
