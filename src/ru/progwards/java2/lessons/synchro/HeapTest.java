@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HeapTest {
-    static final int maxSize = 600_000_000;
+    static final int maxSize = 300_000_000;
     //static final int maxSize = 1_932_735_283;
     static final int maxSmall = 10;
     static final int maxMedium = 100;
@@ -36,8 +36,7 @@ public class HeapTest {
         return size > (maxSize-allocated)-1 ? (maxSize-allocated)/2+1 : size+1;
     }
 
-    public static void main(String[] args) throws InvalidPointerException, OutOfMemoryException {
-        Heap heap = new Heap(maxSize);
+    static void test(Heap heap) throws InvalidPointerException, OutOfMemoryException {
         ArrayDeque<Block> blocks = new ArrayDeque<>();
         int count = 0;
         int allocTime = 0;
@@ -77,5 +76,21 @@ public class HeapTest {
         long stop = System.currentTimeMillis();
         System.out.println("malloc time: "+allocTime+" free time: "+freeTime);
         System.out.println("total time: "+(stop-start)+" count: "+count);
+    }
+
+    public static void main(String[] args) {
+        Heap heap = new Heap(maxSize);
+        int n = 3;
+        Thread[] threads = new Thread[n];
+        for (int i = 0; i < n; i++) {
+            threads[i] = new Thread(() -> {
+                try {
+                    HeapTest.test(heap);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+            threads[i].start();
+        }
     }
 }

@@ -51,6 +51,21 @@ public class Account {
     }
 
     public String toString() {
-        return id + ", " + holder + ", " + date + ", " + amount + ", " + pin;
+        return id + ", " + holder + ", " + date.getTime() + ", " + amount + ", " + pin;
+    }
+
+    public static Account parseAccount(String s) throws NumberFormatException {
+        Account account = new Account();
+        String[] sArray = s.split(",");
+        if (sArray.length == 5) {
+            account.setId(sArray[0].trim());
+            account.setHolder(sArray[1].trim());
+            account.setDate(new Date(Long.parseLong(sArray[2].trim())));
+            account.setAmount(Double.parseDouble(sArray[3].trim()));
+            account.setPin(Integer.parseInt(sArray[4].trim()));
+        } else {
+            throw new NumberFormatException();
+        }
+        return account;
     }
 }

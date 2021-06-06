@@ -5,7 +5,6 @@ import app.model.Account;
 import app.service.StoreService;
 
 import java.util.Collection;
-import java.util.List;
 
 public class StoreServiceImpl implements StoreService {
     @Override
@@ -30,14 +29,14 @@ public class StoreServiceImpl implements StoreService {
         if (Store.getStore().get(id) == null) {
             throw new RuntimeException("Account not found by id:"+id);
         }
-        synchronized (Store.getStore()) {
+        synchronized (Store.getSync()) {
             Store.getStore().remove(id);
         }
     }
 
     @Override
     public void insert(Account account) {
-        synchronized (Store.getStore()) {
+        synchronized (Store.getSync()) {
             Store.getStore().put(account.getId(), account);
         }
     }
@@ -47,7 +46,7 @@ public class StoreServiceImpl implements StoreService {
         if (Store.getStore().get(account.getId()) == null){
             throw new RuntimeException("Account not found by id:"+account.getId());
         }
-        synchronized (Store.getStore()) {
+        synchronized (Store.getSync()) {
             this.insert(account);
         }
     }

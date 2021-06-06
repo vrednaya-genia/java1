@@ -3,17 +3,21 @@ package ru.progwards.java2.lessons.synchro;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 class InvalidPointerException extends Exception {
     InvalidPointerException(int ptr) {
         super("Неверный указатель! " + ptr + " не является началом блока!");
     }
 }
+
 class OutOfMemoryException extends Exception {
     OutOfMemoryException(int size) {
         super("Нет свободного блока размера " + size);
     }
 }
+
 class MyBlock {
     public int ptr;
     public int size;
@@ -24,12 +28,14 @@ class MyBlock {
     }
 }
 
+// У меня не получилось сделать 3 задание
 public class Heap {
     private final byte[] heap;
-    private final Map<Integer, Integer> filledBlocks; // <ptr, size>
-    private final NavigableSet<MyBlock> freeBlocks;
-    private final Map<Integer, Integer> codePtrs; // <testPtr, myPtr>
+    private Map<Integer, Integer> filledBlocks; // <ptr, size>
+    private NavigableSet<MyBlock> freeBlocks;
+    private Map<Integer, Integer> codePtrs; // <testPtr, myPtr>
     private boolean isBeforeCompact;
+    private final Lock lock;
 
     Heap(int maxHeapSize) {
         heap = new byte[maxHeapSize];
@@ -38,6 +44,7 @@ public class Heap {
         freeBlocks.add(new MyBlock(0, maxHeapSize));
         codePtrs = new ConcurrentHashMap<>();
         isBeforeCompact = true;
+        lock = new ReentrantLock();
     }
 
     int findToMalloc(int size) {
@@ -46,13 +53,18 @@ public class Heap {
         if (currBlock != null) {
             int currPtr = currBlock.ptr;
             int currSize = currBlock.size;
-            filledBlocks.put(currPtr, size);
-            freeBlocks.remove(currBlock);
-            if (currSize > size) {
-                freeBlocks.add(new MyBlock(currPtr + size, currSize - size));
-            }
-            if (!isBeforeCompact) {
-                codePtrs.put(currPtr, null);
+            lock.lock();
+            try {
+                filledBlocks.put(currPtr, size);
+                freeBlocks.remove(currBlock);
+                if (currSize > size) {
+                    freeBlocks.add(new MyBlock(currPtr + size, currSize - size));
+                }
+                if (!isBeforeCompact) {
+                    codePtrs.put(currPtr, null);
+                }
+            } finally {
+                lock.unlock();
             }
             for (int i = currPtr; i < currPtr + size; i++) {
                 heap[i] = 1;
@@ -91,14 +103,20 @@ public class Heap {
             }
             if (filledBlocks.containsKey(newPtr)) {
                 Integer size = filledBlocks.get(newPtr);
-                filledBlocks.remove(newPtr);
-                if (!isBeforeCompact) {
-                    codePtrs.remove(ptr);
+                lock.lock();
+                try {
+                    filledBlocks.remove(newPtr);
+                    if (!isBeforeCompact) {
+                        codePtrs.remove(ptr);
+                    }
+                    MyBlock block = new MyBlock(newPtr, size);
+                    freeBlocks.add(block);
+                    defrag(block);
+                } finally {
+                    lock.unlock();
                 }
-                MyBlock block = new MyBlock(newPtr, size);
-                freeBlocks.add(block);
-                defrag(block);
-
+                //Thread thread = new Thread(() -> defrag(block));
+                //thread.start();
                 for (int i = newPtr; i < newPtr+size; i++) {
                     heap[i] = 0;
                 }
@@ -111,15 +129,33 @@ public class Heap {
     }
 
     public void defrag(MyBlock block) {
+        /*
+        NavigableSet<MyBlock> freetemp = new TreeSet<>(Comparator.comparingInt(m -> m.ptr));
+        freetemp.addAll(freeBlocks);
+        MyBlock[] blocks = new MyBlock[freetemp.size()];
+        freetemp.toArray(blocks);
+        for (int i=0; i < blocks.length-1; i++) {
+            int newPtr = blocks[i].ptr;
+            if (blocks[i].ptr + blocks[i].size == blocks[i+1].ptr) {
+                int newSize = blocks[i].size + blocks[i+1].size;
+                freeBlocks.remove(blocks[i]);
+                freeBlocks.remove(blocks[i+1]);
+                i++;
+                while (blocks[i].ptr + blocks[i].size == blocks[i+1].ptr) {
+                    newSize += blocks[i+1].size;
+                    freeBlocks.remove(blocks[i+1]);
+                    i++;
+                }
+                freeBlocks.add(new MyBlock(newPtr, newSize));
+            }
+        }*/
         NavigableSet<MyBlock> freetemp = new TreeSet<>(Comparator.comparingInt(m -> m.ptr));
         freetemp.addAll(freeBlocks);
         MyBlock left = freetemp.lower(block);
         MyBlock right = freetemp.higher(block);
-
         if (left == null && right == null) {
             return;
         }
-
         int newPtr = block.ptr;
         int newSize = block.size;
         freeBlocks.remove(block);

@@ -24,8 +24,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deposit(Account account, double amount) {
         double sum = account.getAmount() + amount;
-        synchronized (Store.getStore()) {
-            account.setAmount(sum);
+        account.setAmount(sum);
+        synchronized (Store.getSync()) {
             service.update(account);
         }
     }
@@ -36,8 +36,8 @@ public class AccountServiceImpl implements AccountService {
         if (sum < 0) {
             throw new RuntimeException("Not enough money");
         }
-        synchronized (Store.getStore()) {
-            account.setAmount(sum);
+        account.setAmount(sum);
+        synchronized (Store.getSync()) {
             service.update(account);
         }
     }
@@ -49,11 +49,35 @@ public class AccountServiceImpl implements AccountService {
         if (fromSum < 0) {
             throw new RuntimeException("Not enough money");
         }
-        synchronized (Store.getStore()) {
-            from.setAmount(fromSum);
+        from.setAmount(fromSum);
+        to.setAmount(toSum);
+        synchronized (Store.getSync()) {
             service.update(from);
-            to.setAmount(toSum);
-            service.update(to);
+            try {
+                service.update(to);
+            } catch (RuntimeException e) {
+                from.setAmount(fromSum + amount);
+                service.update(from);
+                throw new RuntimeException("Can't transfer money");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        FileStoreService fss = new FileStoreService();
+        StoreServiceImpl ssi = new StoreServiceImpl();
+        AccountServiceImpl asi = new AccountServiceImpl(ssi);
+        Thread[] t = new Thread[Store.getStore().size()];
+        int i = 0;
+        for (Account acc : Store.getStore().values()) {
+            t[i] = new Thread(() -> {
+                System.out.println(Thread.currentThread().getName() + " " + asi.balance(acc));
+                asi.deposit(acc, 2.0);
+                System.out.println(Thread.currentThread().getName() + " " + asi.balance(acc));
+                asi.withdraw(acc, 1.0);
+                System.out.println(Thread.currentThread().getName() + " " + asi.balance(acc));
+            });
+            t[i++].start();
         }
     }
 }

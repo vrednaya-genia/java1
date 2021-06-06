@@ -11,3 +11,5 @@ public interface StoreService {
     public void insert(Account account);
     public void update(Account account);
 }
+
+// не поняла как надо расширить функциональность StoreService
