@@ -82,7 +82,7 @@ public class BinaryTree<K extends Comparable<K>, V> implements Iterable<BinaryTr
         }
 
         public String toString() {
-            return "(" + key + "," + value + ")";
+            return "(" + key + ", " + value + ")";
         }
     }
 
@@ -127,10 +127,8 @@ public class BinaryTree<K extends Comparable<K>, V> implements Iterable<BinaryTr
                 if (found.left != null) {
                     add(found.left);
                 }
-            } else if (found.left != null) {
-                root = found.left;
             } else {
-                root = null;
+                root = found.left;
             }
         } else {
             found.delete();
