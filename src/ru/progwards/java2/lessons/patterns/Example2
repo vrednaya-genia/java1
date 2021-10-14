@@ -1,0 +1,131 @@
+public class ShortInteger extends AbsInteger {
+    short val;
+
+    public ShortInteger (short val) {
+        super(val);
+        this.val = val;
+    }
+
+    @Override
+    public String toString () {
+        return String.valueOf(val);
+    }
+}
+
+
+public class ByteInteger extends AbsInteger {
+    byte val;
+
+    public ByteInteger (byte val) {
+        super(val);
+        this.val = val;
+    }
+
+    @Override
+    public String toString () {
+        return String.valueOf(val);
+    }
+}
+
+
+public class IntInteger extends AbsInteger {
+    int val;
+
+    public IntInteger (int val) {
+        super(val);
+        this.val = val;
+    }
+
+    @Override
+    public String toString () {
+        return String.valueOf(val);
+    }
+}
+
+
+import java.math.BigInteger;
+
+public class AbsInteger {
+    int num;
+
+    public AbsInteger (int num) {
+        this.num = num;
+    }
+
+    public String toString() {
+        return String.valueOf(num);
+    }
+
+    static AbsInteger add(AbsInteger num1, AbsInteger num2) {
+        BigInteger N1 = new BigInteger(String.valueOf(num1));
+        BigInteger N2 = new BigInteger(String.valueOf(num2));
+        N1 = N1.add(N2);
+        int temp = N1.intValueExact();
+        if (temp < Byte.MAX_VALUE && temp > Byte.MIN_VALUE) {
+            return new ByteInteger((byte)temp);
+        }
+        else if (temp < Short.MAX_VALUE && temp > Short.MIN_VALUE) {
+            return new ShortInteger((short) temp);
+        }
+        else return new IntInteger(temp);
+    }
+}
+
+
+import java.math.BigInteger;
+
+public enum AbsFactInteger {
+    INSTANCE;
+
+    public AbsInteger getInteger (int num) {
+        int temp = new BigInteger(String.valueOf(num)).intValueExact();
+        if (temp < Byte.MAX_VALUE && temp > Byte.MIN_VALUE)
+            return new ByteInteger((byte)temp);
+        else if (temp < Short.MAX_VALUE && temp > Short.MIN_VALUE)
+            return new ShortInteger((short) temp);
+        else return new IntInteger(temp);
+    }
+}
+
+
+import java.util.Random;
+
+public class Client {
+
+    public static void main(String[] args) {
+        Thread[] threads = new Thread[10];
+        for (int i =0; i<threads.length; i++) {
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Random random = new Random();
+                    int next;
+                    AbsInteger newInteger;
+                    for (int j = 0; j<10; j++) {
+                        next = random.nextInt();
+                        newInteger = AbsFactInteger.INSTANCE.getInteger(next);
+                        System.out.println("Число " + next + " и класс " + newInteger.getClass());
+                        next = random.nextInt(128);
+                        newInteger = AbsFactInteger.INSTANCE.getInteger(next);
+                        System.out.println("Число " + next + " и класс " + newInteger.getClass());
+                        next = random.nextInt(Short.MAX_VALUE);
+                        newInteger = AbsFactInteger.INSTANCE.getInteger(next);
+                        System.out.println("Число " + next + " и класс " + newInteger.getClass());
+                    }
+                }
+            });
+        }
+
+        for (int i =0; i<threads.length; i++) {
+            threads[i].start();
+        }
+
+        for (int i =0; i<threads.length; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

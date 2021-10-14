@@ -3,7 +3,7 @@ package ru.progwards.java1.lessons.datetime;
 import java.util.*;
 
 public class Profiler {
-    static Map<String, StatisticInfo> Sections = new HashMap<>();
+    static Map<String, StatisticInfo> sections = new HashMap<>();
     static Map<String, Long> startTime = new HashMap<>(); // <ИмяСекции, Старт>
     static Map<String, Integer> counts = new HashMap<>(); // <ИмяСекции, КоличествоВходов>
     static Deque<String> qSections = new ArrayDeque<>();
@@ -29,30 +29,30 @@ public class Profiler {
         while (!name.equals(qSections.peekFirst())) {
             isNested = true;
             String prevname = qSections.pollFirst();
-            StatisticInfo prev = Sections.get(prevname);
+            StatisticInfo prev = sections.get(prevname);
             prevTime = prevTime + prev.fullTime;
         }
         if (isNested) {
-            if (!Sections.isEmpty() && Sections.containsKey(name)) {
-                StatisticInfo val = Sections.get(name);
+            if (!sections.isEmpty() && sections.containsKey(name)) {
+                StatisticInfo val = sections.get(name);
                 fullTime += val.fullTime;
                 selfTime = fullTime - prevTime;
             } else {
                 selfTime = selfTime - prevTime;
             }
         } else {
-            if (!Sections.isEmpty() && Sections.containsKey(name)) {
-                StatisticInfo val = Sections.get(name);
+            if (!sections.isEmpty() && sections.containsKey(name)) {
+                StatisticInfo val = sections.get(name);
                 fullTime += val.fullTime;
                 selfTime += val.selfTime;
             }
         }
         StatisticInfo newSI = new StatisticInfo(name, (int) fullTime, (int) selfTime, counts.get(name));
-        Sections.put(name, newSI);
+        sections.put(name, newSI);
     }
 
     public static List<StatisticInfo> getStatisticInfo() {
-        Collection<StatisticInfo> temp = Sections.values();
+        Collection<StatisticInfo> temp = sections.values();
         List<StatisticInfo> res = new ArrayList<>(temp);
         res.sort(StatisticInfo::compareTo);
         return res;
